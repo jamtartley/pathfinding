@@ -8,13 +8,18 @@ export default class Grid {
 
         for (let i = 0; i < this.height; i++) {
             for (let j = 0; j < this.width; j++) {
-                this.nodes.push(new Node(j, i, true));
+                let node = new Node(j, i, true);
+                this.nodes.push(node);
             }
         }
     }
 
     getNodeAt(x, y) {
         return this.nodes[y * this.width + x];
+    }
+
+    getNodesByState(state) {
+        return this.nodes.filter(n => n.state == state);
     }
 
     canWalkAt(x, y) {
