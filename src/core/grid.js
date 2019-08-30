@@ -1,4 +1,4 @@
-import Node from "./node.js";
+import Node, { NodeState } from "./node.js";
 
 export default class Grid {
     constructor(width, height) {
@@ -8,7 +8,7 @@ export default class Grid {
 
         for (let i = 0; i < this.height; i++) {
             for (let j = 0; j < this.width; j++) {
-                let node = new Node(j, i, true);
+                let node = new Node(j, i);
                 this.nodes.push(node);
             }
         }
@@ -23,7 +23,7 @@ export default class Grid {
     }
 
     canWalkAt(x, y) {
-        return this.isInGrid && this.getNodeAt(x, y).isWalkable;
+        return this.isInGrid && this.getNodeAt(x, y).state !== NodeState.WALL;
     }
 
     isInGrid(x, y) {
@@ -38,6 +38,6 @@ export default class Grid {
             this.getNodeAt(origin.x + 1, origin.y),
         ];
 
-        return neighbours.filter(n => n !== undefined && n.isWalkable);
+        return neighbours.filter(n => n !== undefined && n.state !== NodeState.WALL);
     }
 };

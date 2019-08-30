@@ -1,14 +1,14 @@
 export const NodeState = Object.freeze({
-    EMPTY: Symbol("empty"),
-    START: Symbol("start"),
-    END: Symbol("end")
+    EMPTY: "empty",
+    WALL: "wall",
+    START: "start",
+    END: "end"
 });
 
 export default class Node {
-    constructor(x, y, isWalkable) {
+    constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.isWalkable = isWalkable;
         this.state = NodeState.EMPTY;
     }
 

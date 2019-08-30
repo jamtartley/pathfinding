@@ -5,7 +5,9 @@ import Renderer from "./renderer.js";
 const Action = Object.freeze({
     NONE: "none",
     DRAGGING_START: "dragging-start",
-    DRAGGING_END: "dragging-end"
+    DRAGGING_END: "dragging-end",
+    PAINTING_WALLS: "painting-walls",
+    CLEARING_WALLS: "clearing-walls"
 });
 
 export default class Controller {
@@ -50,10 +52,19 @@ export default class Controller {
         let selectedNode = this.getNodeAtPagePos(event.pageX, event.pageY);
 
         if (selectedNode) {
-            if (selectedNode === this.grid.start) {
-                this.action = Action.DRAGGING_START;
-            } else if (selectedNode === this.grid.end) {
-                this.action = Action.DRAGGING_END;
+            switch (selectedNode.state) {
+                case NodeState.START:
+                    this.action = Action.DRAGGING_START;
+                    break;
+                case NodeState.END:
+                    this.action = Action.DRAGGING_END;
+                    break;
+                case NodeState.EMPTY:
+                    this.action = Action.PAINTING_WALLS;
+                    break;
+                case NodeState.WALL:
+                    this.action = Action.CLEARING_WALLS;
+                    break;
             }
         }
     }
@@ -65,14 +76,29 @@ export default class Controller {
 
     mousemove(event) {
         let selectedNode = this.getNodeAtPagePos(event.pageX, event.pageY);
-
         if (!selectedNode) return;
-        if (selectedNode.state !== NodeState.EMPTY) return;
 
-        if (this.action === Action.DRAGGING_START) {
-            this.setStart(selectedNode);
-        } else if (this.action === Action.DRAGGING_END) {
-            this.setEnd(selectedNode);
+        switch (this.action) {
+            case Action.DRAGGING_START:
+                if (selectedNode.state === NodeState.EMPTY) {
+                    this.setStart(selectedNode);
+                }
+                break;
+            case Action.DRAGGING_END:
+                if (selectedNode.state === NodeState.EMPTY) {
+                    this.setEnd(selectedNode);
+                }
+                break;
+            case Action.PAINTING_WALLS:
+                if (selectedNode.state === NodeState.EMPTY) {
+                    selectedNode.setState(NodeState.WALL);
+                }
+                break;
+            case Action.CLEARING_WALLS:
+                if (selectedNode.state === NodeState.WALL) {
+                    selectedNode.setState(NodeState.EMPTY);
+                }
+                break;
         }
     }
 };
