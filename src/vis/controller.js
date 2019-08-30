@@ -2,9 +2,16 @@ import Grid from "../core/grid.js";
 import { NodeState } from "../core/node.js";
 import Renderer from "./renderer.js";
 
+const Action = Object.freeze({
+    NONE: "none",
+    DRAGGING_START: "dragging-start",
+    DRAGGING_END: "dragging-end"
+});
+
 export default class Controller {
     constructor(grid) {
         this.size = 40;
+        this.action = Action.NONE;
 
         this.grid = grid;
         this.renderer = new Renderer(grid, this.size);
@@ -13,7 +20,10 @@ export default class Controller {
             node.onStateChange = this.renderer.renderNode.bind(this.renderer);
         }
 
-        $("#grid-area").mousedown($.proxy(this.mousedown, this));
+        let gridArea = $("#grid-area");
+        gridArea.mousedown($.proxy(this.mousedown, this));
+        gridArea.mouseup($.proxy(this.mouseup, this));
+        gridArea.mousemove($.proxy(this.mousemove, this));
     }
 
     setStart(node) {
@@ -38,6 +48,31 @@ export default class Controller {
 
     mousedown(event) {
         let selectedNode = this.getNodeAtPagePos(event.pageX, event.pageY);
-        if (selectedNode) this.setStart(selectedNode);
+
+        if (selectedNode) {
+            if (selectedNode === this.grid.start) {
+                this.action = Action.DRAGGING_START;
+            } else if (selectedNode === this.grid.end) {
+                this.action = Action.DRAGGING_END;
+            }
+        }
+    }
+
+    mouseup(event) {
+        let selectedNode = this.getNodeAtPagePos(event.pageX, event.pageY);
+        this.action = Action.NONE;
+    }
+
+    mousemove(event) {
+        let selectedNode = this.getNodeAtPagePos(event.pageX, event.pageY);
+
+        if (!selectedNode) return;
+        if (selectedNode.state !== NodeState.EMPTY) return;
+
+        if (this.action === Action.DRAGGING_START) {
+            this.setStart(selectedNode);
+        } else if (this.action === Action.DRAGGING_END) {
+            this.setEnd(selectedNode);
+        }
     }
 };
