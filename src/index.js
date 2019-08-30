@@ -1,4 +1,7 @@
 import Grid from "./core/grid.js";
-import * as Render from "./render.js";
+import Controller from "./vis/controller.js";
 
-let g = new Grid(10, 5);
+window.addEventListener("DOMContentLoaded", (event) => {
+    let g = new Grid(7, 4);
+    let c = new Controller(g);
+});
