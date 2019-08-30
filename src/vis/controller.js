@@ -1,5 +1,5 @@
 import Grid from "../core/grid.js";
-import { NodeState } from "../core/node.js";
+import { NodeType } from "../core/node.js";
 import Renderer from "./renderer.js";
 
 const Action = Object.freeze({
@@ -29,17 +29,17 @@ export default class Controller {
     }
 
     setStart(node) {
-        if (this.grid.start) this.grid.start.setState(NodeState.EMPTY);
+        if (this.grid.start) this.grid.start.setState(NodeType.EMPTY);
         this.grid.start = node;
 
-        node.setState(NodeState.START);
+        node.setState(NodeType.START);
     }
 
     setEnd(node) {
-        if (this.grid.end) this.grid.end.setState(NodeState.EMPTY);
+        if (this.grid.end) this.grid.end.setState(NodeType.EMPTY);
         this.grid.end = node;
 
-        node.setState(NodeState.END);
+        node.setState(NodeType.END);
     }
 
     getNodeAtPagePos(pageX, pageY) {
@@ -53,16 +53,16 @@ export default class Controller {
 
         if (selectedNode) {
             switch (selectedNode.state) {
-                case NodeState.START:
+                case NodeType.START:
                     this.action = Action.DRAGGING_START;
                     break;
-                case NodeState.END:
+                case NodeType.END:
                     this.action = Action.DRAGGING_END;
                     break;
-                case NodeState.EMPTY:
+                case NodeType.EMPTY:
                     this.action = Action.PAINTING_WALLS;
                     break;
-                case NodeState.WALL:
+                case NodeType.WALL:
                     this.action = Action.CLEARING_WALLS;
                     break;
             }
@@ -80,23 +80,23 @@ export default class Controller {
 
         switch (this.action) {
             case Action.DRAGGING_START:
-                if (selectedNode.state === NodeState.EMPTY) {
+                if (selectedNode.state === NodeType.EMPTY) {
                     this.setStart(selectedNode);
                 }
                 break;
             case Action.DRAGGING_END:
-                if (selectedNode.state === NodeState.EMPTY) {
+                if (selectedNode.state === NodeType.EMPTY) {
                     this.setEnd(selectedNode);
                 }
                 break;
             case Action.PAINTING_WALLS:
-                if (selectedNode.state === NodeState.EMPTY) {
-                    selectedNode.setState(NodeState.WALL);
+                if (selectedNode.state === NodeType.EMPTY) {
+                    selectedNode.setState(NodeType.WALL);
                 }
                 break;
             case Action.CLEARING_WALLS:
-                if (selectedNode.state === NodeState.WALL) {
-                    selectedNode.setState(NodeState.EMPTY);
+                if (selectedNode.state === NodeType.WALL) {
+                    selectedNode.setState(NodeType.EMPTY);
                 }
                 break;
         }

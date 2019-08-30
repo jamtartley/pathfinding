@@ -1,20 +1,20 @@
 import Raphael from "../lib/raphael.js";
 import Grid from "../core/grid.js";
-import { NodeState } from "../core/node.js";
+import { NodeType } from "../core/node.js";
 
-const nodeStateStyles = {
-    [NodeState.EMPTY]: {
-        fill: "rgb(21, 48, 66)",
-        "stroke": "rgb(24, 53, 71)"
+const nodeTypeStyles = {
+    [NodeType.EMPTY]: {
+        fill: "#153042",
+        "stroke": "#244153"
     },
-    [NodeState.WALL]: {
-        fill: "grey"
+    [NodeType.WALL]: {
+        fill: "#244153"
     },
-    [NodeState.START]: {
-        fill: "blue",
+    [NodeType.START]: {
+        fill: "#425F1A",
     },
-    [NodeState.END]: {
-        fill: "orange",
+    [NodeType.END]: {
+        fill: "#641B22",
     }
 };
 
@@ -38,6 +38,6 @@ export default class Renderer {
     }
 
     renderNode(node) {
-        this.nodeRectMap.get(node).attr(nodeStateStyles[node.state]);
+        this.nodeRectMap.get(node).attr(nodeTypeStyles[node.state]);
     }
 };

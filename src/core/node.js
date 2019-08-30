@@ -1,4 +1,4 @@
-export const NodeState = Object.freeze({
+export const NodeType = Object.freeze({
     EMPTY: "empty",
     WALL: "wall",
     START: "start",
@@ -9,7 +9,7 @@ export default class Node {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.state = NodeState.EMPTY;
+        this.state = NodeType.EMPTY;
     }
 
     setState(state) {

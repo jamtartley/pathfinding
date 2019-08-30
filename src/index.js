@@ -5,6 +5,6 @@ window.addEventListener("DOMContentLoaded", (event) => {
     let grid = new Grid(20, 20);
     let controller = new Controller(grid);
 
-    controller.setStart(grid.getNodeAt(1, 3));
-    controller.setEnd(grid.getNodeAt(8, 14));
+    controller.setStart(grid.getNodeAt(5, 9));
+    controller.setEnd(grid.getNodeAt(14, 9));
 });
