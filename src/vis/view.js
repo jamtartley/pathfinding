@@ -10,17 +10,32 @@ export default class View {
     }
 
     render() {
-        var self = this;
-        window.requestAnimationFrame(frame);
+        let self = this;
 
         function frame() {
+            let width = window.innerWidth;
+            let height = window.innerHeight;
+            let nodeSize = Math.max(width / self.grid.width, height / self.grid.height);
+
+            self.canvas.width = width;
+            self.canvas.height = height;
+            self.ctx.clearRect(0, 0, width, height);
+
             for (let node of self.grid.nodes) {
+                let x = node.x * nodeSize;
+                let y = node.y * nodeSize;
+
                 self.ctx.beginPath();
+                self.ctx.fillStyle = "rgb(245, 245, 245)";
+                self.ctx.fillRect(x, y, nodeSize, nodeSize);
                 self.ctx.lineWidth = 2;
-                self.ctx.rect(node.x * 20, node.y * 20, 20, 20);
-                self.ctx.stroke();
+                self.ctx.strokeStyle = "rgb(150, 150, 150)";
+                self.ctx.strokeRect(x, y, nodeSize, nodeSize);
             }
+
             window.requestAnimationFrame(frame);
         }
+
+        window.requestAnimationFrame(frame);
     }
 };
