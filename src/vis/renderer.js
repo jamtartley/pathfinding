@@ -18,6 +18,18 @@ const nodeTypeStyles = {
     }
 };
 
+const wallEffect = {
+    duration: 150,
+    transform: "s0.6",
+    transformBack: "s1"
+};
+
+const clearEffect = {
+    duration: 150,
+    transform: "s0.6",
+    transformBack: "s1"
+};
+
 export default class Renderer {
     constructor(grid, size) {
         this.grid = grid;
@@ -38,6 +50,13 @@ export default class Renderer {
     }
 
     renderNode(node) {
-        this.nodeRectMap.get(node).attr(nodeTypeStyles[node.state]);
+        let rect = this.nodeRectMap.get(node);
+        rect.attr(nodeTypeStyles[node.state]);
+
+        if (node.state === NodeType.WALL) {
+            rect.attr({transform: wallEffect.transform}).animate({transform: wallEffect.transformBack}, wallEffect.duration);
+        } else if (node.state == NodeType.EMPTY) {
+            rect.attr({transform: clearEffect.transform}).animate({transform: clearEffect.transformBack}, clearEffect.duration);
+        }
     }
 };
