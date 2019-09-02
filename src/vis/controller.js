@@ -19,9 +19,11 @@ export default class Controller {
 
         this.grid = grid;
         this.renderer = new Renderer(grid, this.size);
+        this.opStack = [];
 
         for (let node of this.grid.nodes) {
             node.onTypeChange = this.renderer.changeType.bind(this.renderer);
+            node.onStateChange = this.onStateChange.bind(this);
         }
 
         let gridArea = $("#grid-area");
@@ -50,6 +52,28 @@ export default class Controller {
         let x = Math.floor(pageX / this.size);
         let y = Math.floor(pageY / this.size);
         return this.grid.getNodeAt(x, y);
+    }
+
+    onStateChange(node) {
+        this.opStack.push({node:node, state:node.state});
+    }
+
+    search(event) {
+        const opsHz = 200;
+
+        this.grid.resetSearchDecorations();
+        this.renderer.reset();
+        this.opStack = [];
+
+        let path = ASTAR_FIND(this.grid, Heuristics.euclidean);
+
+        for (let i = 0; i < this.opStack.length; i++) {
+            let op = this.opStack[i];
+            setTimeout(() => {
+                this.renderer.showState(op.node, op.state); 
+                if (path && i === this.opStack.length - 1) this.renderer.drawPath(path);
+            }, i * (1000 / opsHz));
+        }
     }
 
     mousedown(event) {
@@ -104,12 +128,5 @@ export default class Controller {
                 }
                 break;
         }
-    }
-
-    search(event) {
-        this.grid.resetSearchDecorations();
-
-        let path = ASTAR_FIND(this.grid, Heuristics.euclidean);
-        if (path) this.renderer.drawPath(path);
     }
 };

@@ -23,4 +23,9 @@ export default class Node {
         this.type = type;
         if (this.onTypeChange) this.onTypeChange(this);
     }
+
+    setState(state) {
+        this.state = state;
+        if (this.onStateChange) this.onStateChange(this);
+    }
 };

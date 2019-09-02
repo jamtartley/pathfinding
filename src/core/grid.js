@@ -33,7 +33,7 @@ export default class Grid {
 
     resetSearchDecorations() {
         for (let node of this.nodes) {
-            node.state = NodeState.NONE;
+            node.setState(NodeState.NONE);
             node.f = node.g = node.h = 0;
         }
     }
@@ -44,6 +44,11 @@ export default class Grid {
             this.getNodeAt(origin.x + 1, origin.y),
             this.getNodeAt(origin.x, origin.y + 1),
             this.getNodeAt(origin.x - 1, origin.y),
+
+            this.getNodeAt(origin.x + 1, origin.y - 1),
+            this.getNodeAt(origin.x + 1, origin.y + 1),
+            this.getNodeAt(origin.x - 1, origin.y + 1),
+            this.getNodeAt(origin.x - 1, origin.y - 1),
         ];
 
         return neighbours.filter(n => n && n.type !== NodeType.WALL);

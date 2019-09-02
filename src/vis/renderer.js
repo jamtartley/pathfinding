@@ -2,44 +2,46 @@ import Raphael from "../lib/raphael.js";
 import Grid from "../core/grid.js";
 import { NodeState, NodeType } from "../core/node.js";
 
-const nodeTypeStyles = {
-    [NodeType.EMPTY]: {
-        fill: "#153042",
-        stroke: "#244153"
-    },
-    [NodeType.WALL]: {
-        fill: "#244153",
-        stroke: "#244153"
-    },
-    [NodeType.START]: {
-        fill: "#425F1A",
-        stroke: "#244153"
-    },
-    [NodeType.END]: {
-        fill: "#641B22",
-        stroke: "#244153"
-    }
-};
-
-const nodeStateStyles = {
-    [NodeState.NONE]: {
-        fill: "#153042",
-        "stroke": "#244153"
-    },
-    [NodeState.OPEN]: {
-        fill: "orange",
-        "stroke": "#244153"
-    },
-    [NodeState.CLOSED]: {
-        fill: "purple",
-        "stroke": "#244153"
-    }
-};
-
+const strokeColour = "#244153";
+const solvedLine = {
+    stroke: "#a99856",
+    "stroke-width": 4
+}
 const wallEffect = {
     duration: 150,
     transform: "s0.6",
     transformBack: "s1"
+};
+
+const nodeTypeStyles = {
+    [NodeType.EMPTY]: {
+        fill: "#153042",
+        stroke: strokeColour
+    },
+    [NodeType.WALL]: {
+        fill: "#081F2D",
+        stroke: strokeColour
+    },
+    [NodeType.START]: {
+        fill: "#43834B",
+        stroke: strokeColour
+    },
+    [NodeType.END]: {
+        fill: "#A95B56",
+        stroke: strokeColour
+    }
+};
+
+const nodeStateStyles = {
+    [NodeState.NONE]: nodeTypeStyles[NodeType.EMPTY],
+    [NodeState.OPEN]: {
+        fill: "#3A596C",
+        stroke: strokeColour
+    },
+    [NodeState.CLOSED]: {
+        fill: "#557182",
+        stroke: strokeColour
+    }
 };
 
 export default class Renderer {
@@ -66,11 +68,11 @@ export default class Renderer {
 
         switch (node.type) {
             case NodeType.EMPTY:
-                rect.attr($.extend(style, {transform: wallEffect.transform}))
+                rect.attr($.extend({}, style, {transform: wallEffect.transform}))
                     .animate({transform: wallEffect.transformBack}, wallEffect.duration);
                 break;
             case NodeType.WALL:
-                rect.attr($.extend(style, {transform: wallEffect.transform}))
+                rect.attr($.extend({}, style, {transform: wallEffect.transform}))
                     .animate({transform: wallEffect.transformBack}, wallEffect.duration);
                 break;
             case NodeType.START:
@@ -82,13 +84,33 @@ export default class Renderer {
         }
     }
 
-    drawPath(path) {
+    showState(node, state) {
+        if (node.type !== NodeType.EMPTY) return;
+
+        let rect = this.nodeRectMap.get(node);
+        let style = nodeStateStyles[state];
+
+        rect.attr(style);
+    }
+
+    reset() {
+        this.clearPath();
+
+        for (let node of this.grid.nodes) {
+            this.showState(node, node.state);
+        }
+    }
+
+    clearPath() {
+        console.log(this);
         if (this.path) this.path.remove();
+    }
+
+    drawPath(path) {
         if (!path || path.length === 0) return;
 
         let svg = this.createSvgFromPath(path);
-
-        this.path = this.paper.path(svg).attr({stroke: "green", "stroke-width": 1});
+        this.path = this.paper.path(svg).attr(solvedLine);
     }
 
     createSvgFromPath(path) {

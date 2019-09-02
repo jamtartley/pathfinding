@@ -8,11 +8,11 @@ export function find(grid, heuristic) {
     });
 
     open.push(grid.start);
-    grid.start.state = NodeState.OPEN;
+    grid.start.setState(NodeState.OPEN);
 
     while (open.empty() === false) {
         let origin = open.pop();
-        origin.state = NodeState.CLOSED;
+        origin.setState(NodeState.CLOSED);
 
         if (origin === grid.end) return getPath(grid);
 
@@ -31,7 +31,7 @@ export function find(grid, heuristic) {
 
                 if (n.state !== NodeState.OPEN) {
                     open.push(n);
-                    n.state = NodeState.OPEN;
+                    n.setState(NodeState.OPEN);
                 } else {
                     open.updateItem(n);
                 }
@@ -51,6 +51,5 @@ function getPath(grid) {
         path.unshift(curr);
     }
 
-    console.log(path.reverse());
     return path.reverse();
 }
