@@ -41,9 +41,13 @@ export default class Grid {
     getWalkableNeighbours(origin) {
         let neighbours = [
             this.getNodeAt(origin.x, origin.y - 1),
-            this.getNodeAt(origin.x, origin.y + 1),
-            this.getNodeAt(origin.x - 1, origin.y),
+            this.getNodeAt(origin.x + 1, origin.y - 1),
             this.getNodeAt(origin.x + 1, origin.y),
+            this.getNodeAt(origin.x + 1, origin.y + 1),
+            this.getNodeAt(origin.x, origin.y + 1),
+            this.getNodeAt(origin.x - 1, origin.y + 1),
+            this.getNodeAt(origin.x - 1, origin.y),
+            this.getNodeAt(origin.x - 1, origin.y - 1),
         ];
 
         return neighbours.filter(n => n !== undefined && n.type !== NodeType.WALL);

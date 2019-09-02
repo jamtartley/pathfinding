@@ -12,6 +12,7 @@ export function find(grid) {
 
     while (open.empty() === false) {
         let q = open.pop();
+        console.log(q);
         q.isClosed = true;
 
         if (q === grid.end) return getPath(grid);
@@ -53,13 +54,13 @@ function euclidean(a, b) {
 }
 
 function getPath(grid) {
-    let curr = grid.end;
-    let path = [];
+    let curr = grid.end
+    let path = [curr];
 
     while (curr.parent) {
-        path.unshift(curr);
         curr = curr.parent;
+        path.unshift(curr);
     }
 
-    return path;
+    return path.reverse();
 }

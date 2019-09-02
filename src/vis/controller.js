@@ -109,10 +109,6 @@ export default class Controller {
         this.grid.resetSearchDecorations();
 
         let path = ASTAR_FIND(this.grid);
-        if (path) {
-            for (let node of path) {
-                console.log(node);
-            }
-        }
+        if (path) this.renderer.drawPath(path);
     }
 };

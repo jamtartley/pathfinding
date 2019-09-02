@@ -59,4 +59,31 @@ export default class Renderer {
             rect.attr({transform: clearEffect.transform}).animate({transform: clearEffect.transformBack}, clearEffect.duration);
         }
     }
+
+    drawPath(path) {
+        if (this.path) this.path.remove();
+        if (!path || path.length === 0) return;
+
+        let svg = this.createSvgFromPath(path);
+
+        this.path = this.paper.path(svg).attr({stroke: "green", "stroke-width": 1});
+    }
+
+    createSvgFromPath(path) {
+        let pathLines = []
+        let halfSize = this.size / 2;
+        let origX = path[0].x * this.size + halfSize;
+        let origY = path[0].y * this.size + halfSize;
+
+        pathLines.push('M' + origX + " " + origY);
+
+        for (let i = 1; i < path.length; i++) {
+            let pX = path[i].x * this.size + halfSize;
+            let pY = path[i].y * this.size + halfSize;
+
+            pathLines.push('L' + pX + " " + pY);
+        }
+
+        return pathLines.join('');
+    }
 };
