@@ -1,12 +1,13 @@
 import Raphael from "../lib/raphael.js";
-import Grid from "../core/grid.js";
-import { NodeState, NodeType } from "../core/node.js";
+import Grid from "../logic/grid.js";
+import { NodeState, NodeType } from "../logic/node.js";
 
 const strokeColour = "#244153";
 const solvedLine = {
-    stroke: "#a99856",
-    "stroke-width": 4
-}
+    stroke: "#ABB8C0",
+    "stroke-width": 5,
+    opacity: 0
+};
 const wallEffect = {
     duration: 150,
     transform: "s0.6",
@@ -102,7 +103,6 @@ export default class Renderer {
     }
 
     clearPath() {
-        console.log(this);
         if (this.path) this.path.remove();
     }
 
@@ -110,7 +110,7 @@ export default class Renderer {
         if (!path || path.length === 0) return;
 
         let svg = this.createSvgFromPath(path);
-        this.path = this.paper.path(svg).attr(solvedLine);
+        this.path = this.paper.path(svg).attr(solvedLine).animate({opacity: 1}, 250);
     }
 
     createSvgFromPath(path) {

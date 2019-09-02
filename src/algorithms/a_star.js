@@ -1,6 +1,6 @@
 let Heap = require("heap");
-import Grid from "../core/grid.js";
-import Node, { NodeState } from "../core/node.js";
+import Grid from "../logic/grid.js";
+import Node, { NodeState } from "../logic/node.js";
 
 export function find(grid, heuristic) {
     let open = new Heap(function(a, b) {

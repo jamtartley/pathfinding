@@ -1,6 +1,6 @@
-import Grid from "../core/grid.js";
-import * as Heuristics from "../core/heuristics.js";
-import { NodeType } from "../core/node.js";
+import Grid from "../logic/grid.js";
+import * as Heuristics from "../logic/heuristics.js";
+import { NodeType } from "../logic/node.js";
 import Renderer from "./renderer.js";
 import { find as ASTAR_FIND } from "../algorithms/a_star.js";
 
@@ -76,6 +76,32 @@ export default class Controller {
         }
     }
 
+    actOnNode(node) {
+        switch (this.action) {
+            case Action.DRAGGING_START:
+                if (node.type === NodeType.EMPTY) {
+                    this.setStart(node);
+                }
+                break;
+            case Action.DRAGGING_END:
+                if (node.type === NodeType.EMPTY) {
+                    this.setEnd(node);
+                }
+                break;
+            case Action.PAINTING_WALLS:
+                if (node.type === NodeType.EMPTY) {
+                    node.setType(NodeType.WALL);
+                }
+                break;
+            case Action.CLEARING_WALLS:
+                if (node.type === NodeType.WALL) {
+                    node.setType(NodeType.EMPTY);
+                }
+                break;
+        }
+
+    }
+
     mousedown(event) {
         let selectedNode = this.getNodeAtPagePos(event.pageX, event.pageY);
 
@@ -94,6 +120,10 @@ export default class Controller {
                     this.action = Action.CLEARING_WALLS;
                     break;
             }
+
+            this.grid.resetSearchDecorations();
+            this.renderer.reset();
+            this.actOnNode(selectedNode);
         }
     }
 
@@ -106,27 +136,6 @@ export default class Controller {
         let selectedNode = this.getNodeAtPagePos(event.pageX, event.pageY);
         if (!selectedNode) return;
 
-        switch (this.action) {
-            case Action.DRAGGING_START:
-                if (selectedNode.type === NodeType.EMPTY) {
-                    this.setStart(selectedNode);
-                }
-                break;
-            case Action.DRAGGING_END:
-                if (selectedNode.type === NodeType.EMPTY) {
-                    this.setEnd(selectedNode);
-                }
-                break;
-            case Action.PAINTING_WALLS:
-                if (selectedNode.type === NodeType.EMPTY) {
-                    selectedNode.setType(NodeType.WALL);
-                }
-                break;
-            case Action.CLEARING_WALLS:
-                if (selectedNode.type === NodeType.WALL) {
-                    selectedNode.setType(NodeType.EMPTY);
-                }
-                break;
-        }
+        this.actOnNode(selectedNode);
     }
 };
