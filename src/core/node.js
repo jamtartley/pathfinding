@@ -9,11 +9,11 @@ export default class Node {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.state = NodeType.EMPTY;
+        this.type = NodeType.EMPTY;
     }
 
-    setState(state) {
-        this.state = state;
-        if (this.onStateChange) this.onStateChange(this);
+    setType(type) {
+        this.type = type;
+        if (this.onTypeChange) this.onTypeChange(this);
     }
 };

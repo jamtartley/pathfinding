@@ -18,16 +18,24 @@ export default class Grid {
         return this.nodes[y * this.width + x];
     }
 
-    getNodesByState(state) {
-        return this.nodes.filter(n => n.state == state);
+    getNodesByType(type) {
+        return this.nodes.filter(n => n.type == type);
     }
 
     canWalkAt(x, y) {
-        return this.isInGrid && this.getNodeAt(x, y).state !== NodeType.WALL;
+        return this.isInGrid && this.getNodeAt(x, y).type !== NodeType.WALL;
     }
 
     isInGrid(x, y) {
         return x >= 0 && x < this.width && y >= 0 && y < this.height;
+    }
+
+    resetSearchDecorations() {
+        for (let node of this.nodes) {
+            node.isOpened = false;
+            node.isClosed = false;
+            node.f = node.g = node.h = 0;
+        }
     }
 
     getWalkableNeighbours(origin) {
@@ -38,6 +46,6 @@ export default class Grid {
             this.getNodeAt(origin.x + 1, origin.y),
         ];
 
-        return neighbours.filter(n => n !== undefined && n.state !== NodeType.WALL);
+        return neighbours.filter(n => n !== undefined && n.type !== NodeType.WALL);
     }
 };

@@ -43,7 +43,7 @@ export default class Renderer {
 
         for (let node of this.grid.nodes) {
             let rect = this.paper.rect(node.x * this.size, node.y * this.size, this.size, this.size);
-            this.nodeRectMap.set(node, rect); // Keep a map so we don't overwrite rects later when changing state
+            this.nodeRectMap.set(node, rect); // Keep a map so we don't overwrite rects later when changing type
 
             this.renderNode(node);
         }
@@ -51,11 +51,11 @@ export default class Renderer {
 
     renderNode(node) {
         let rect = this.nodeRectMap.get(node);
-        rect.attr(nodeTypeStyles[node.state]);
+        rect.attr(nodeTypeStyles[node.type]);
 
-        if (node.state === NodeType.WALL) {
+        if (node.type === NodeType.WALL) {
             rect.attr({transform: wallEffect.transform}).animate({transform: wallEffect.transformBack}, wallEffect.duration);
-        } else if (node.state == NodeType.EMPTY) {
+        } else if (node.type == NodeType.EMPTY) {
             rect.attr({transform: clearEffect.transform}).animate({transform: clearEffect.transformBack}, clearEffect.duration);
         }
     }

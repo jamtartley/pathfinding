@@ -1,6 +1,7 @@
 import Grid from "../core/grid.js";
 import { NodeType } from "../core/node.js";
 import Renderer from "./renderer.js";
+import { find as ASTAR_FIND } from "../algorithms/a_star.js";
 
 const Action = Object.freeze({
     NONE: "none",
@@ -19,27 +20,29 @@ export default class Controller {
         this.renderer = new Renderer(grid, this.size);
 
         for (let node of this.grid.nodes) {
-            node.onStateChange = this.renderer.renderNode.bind(this.renderer);
+            node.onTypeChange = this.renderer.renderNode.bind(this.renderer);
         }
 
         let gridArea = $("#grid-area");
         gridArea.mousedown($.proxy(this.mousedown, this));
         gridArea.mouseup($.proxy(this.mouseup, this));
         gridArea.mousemove($.proxy(this.mousemove, this));
+
+        $("#search").mousedown($.proxy(this.search, this));
     }
 
     setStart(node) {
-        if (this.grid.start) this.grid.start.setState(NodeType.EMPTY);
+        if (this.grid.start) this.grid.start.setType(NodeType.EMPTY);
         this.grid.start = node;
 
-        node.setState(NodeType.START);
+        node.setType(NodeType.START);
     }
 
     setEnd(node) {
-        if (this.grid.end) this.grid.end.setState(NodeType.EMPTY);
+        if (this.grid.end) this.grid.end.setType(NodeType.EMPTY);
         this.grid.end = node;
 
-        node.setState(NodeType.END);
+        node.setType(NodeType.END);
     }
 
     getNodeAtPagePos(pageX, pageY) {
@@ -52,7 +55,7 @@ export default class Controller {
         let selectedNode = this.getNodeAtPagePos(event.pageX, event.pageY);
 
         if (selectedNode) {
-            switch (selectedNode.state) {
+            switch (selectedNode.type) {
                 case NodeType.START:
                     this.action = Action.DRAGGING_START;
                     break;
@@ -80,25 +83,36 @@ export default class Controller {
 
         switch (this.action) {
             case Action.DRAGGING_START:
-                if (selectedNode.state === NodeType.EMPTY) {
+                if (selectedNode.type === NodeType.EMPTY) {
                     this.setStart(selectedNode);
                 }
                 break;
             case Action.DRAGGING_END:
-                if (selectedNode.state === NodeType.EMPTY) {
+                if (selectedNode.type === NodeType.EMPTY) {
                     this.setEnd(selectedNode);
                 }
                 break;
             case Action.PAINTING_WALLS:
-                if (selectedNode.state === NodeType.EMPTY) {
-                    selectedNode.setState(NodeType.WALL);
+                if (selectedNode.type === NodeType.EMPTY) {
+                    selectedNode.setType(NodeType.WALL);
                 }
                 break;
             case Action.CLEARING_WALLS:
-                if (selectedNode.state === NodeType.WALL) {
-                    selectedNode.setState(NodeType.EMPTY);
+                if (selectedNode.type === NodeType.WALL) {
+                    selectedNode.setType(NodeType.EMPTY);
                 }
                 break;
+        }
+    }
+
+    search(event) {
+        this.grid.resetSearchDecorations();
+
+        let path = ASTAR_FIND(this.grid);
+        if (path) {
+            for (let node of path) {
+                console.log(node);
+            }
         }
     }
 };
