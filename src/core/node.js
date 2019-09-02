@@ -16,15 +16,11 @@ export default class Node {
         this.x = x;
         this.y = y;
         this.type = NodeType.EMPTY;
+        this.state = NodeState.NONE;
     }
 
     setType(type) {
         this.type = type;
         if (this.onTypeChange) this.onTypeChange(this);
-    }
-
-    setState(state) {
-        this.state = state;
-        if (this.onStateChange) this.onStateChange(this);
     }
 };

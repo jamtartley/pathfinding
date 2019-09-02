@@ -8,30 +8,30 @@ export function find(grid, heuristic) {
     });
 
     open.push(grid.start);
-    grid.start.setState(NodeState.OPEN);
+    grid.start.state = NodeState.OPEN;
 
     while (open.empty() === false) {
-        let q = open.pop();
-        q.setState(NodeState.CLOSED);
+        let origin = open.pop();
+        origin.state = NodeState.CLOSED;
 
-        if (q === grid.end) return getPath(grid);
+        if (origin === grid.end) return getPath(grid);
 
-        let neighbours = grid.getWalkableNeighbours(q);
+        let neighbours = grid.getWalkableNeighbours(origin);
 
         for (let n of neighbours) {
             if (n.state === NodeState.CLOSED) continue;
 
-            let newG = q.g + ((n.x - q.x === 0 || n.y - q.y === 0) ? 1 : Math.sqrt(2));
+            let newG = grid.start.g + ((n.x - grid.start.x === 0 || n.y - grid.start.y === 0) ? 1 : Math.sqrt(2));
 
             if (n.state !== NodeState.OPEN || newG < n.g) {
                 n.g = newG;
                 n.h = n.h || heuristic(n, grid.end);
                 n.f = n.g + n.h;
-                n.parent = q;
+                n.parent = origin;
 
                 if (n.state !== NodeState.OPEN) {
                     open.push(n);
-                    n.setState(NodeState.OPEN);
+                    n.state = NodeState.OPEN;
                 } else {
                     open.updateItem(n);
                 }
@@ -51,5 +51,6 @@ function getPath(grid) {
         path.unshift(curr);
     }
 
+    console.log(path.reverse());
     return path.reverse();
 }

@@ -21,7 +21,7 @@ export default class Controller {
         this.renderer = new Renderer(grid, this.size);
 
         for (let node of this.grid.nodes) {
-            node.onTypeChange = node.onStateChange = this.renderer.renderNode.bind(this.renderer);
+            node.onTypeChange = this.renderer.changeType.bind(this.renderer);
         }
 
         let gridArea = $("#grid-area");
@@ -109,7 +109,7 @@ export default class Controller {
     search(event) {
         this.grid.resetSearchDecorations();
 
-        let path = ASTAR_FIND(this.grid, Heuristics.manhattan);
+        let path = ASTAR_FIND(this.grid, Heuristics.euclidean);
         if (path) this.renderer.drawPath(path);
     }
 };

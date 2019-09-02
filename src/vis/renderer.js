@@ -5,16 +5,19 @@ import { NodeState, NodeType } from "../core/node.js";
 const nodeTypeStyles = {
     [NodeType.EMPTY]: {
         fill: "#153042",
-        "stroke": "#244153"
+        stroke: "#244153"
     },
     [NodeType.WALL]: {
-        fill: "#244153"
+        fill: "#244153",
+        stroke: "#244153"
     },
     [NodeType.START]: {
         fill: "#425F1A",
+        stroke: "#244153"
     },
     [NodeType.END]: {
         fill: "#641B22",
+        stroke: "#244153"
     }
 };
 
@@ -53,19 +56,29 @@ export default class Renderer {
         for (let node of this.grid.nodes) {
             let rect = this.paper.rect(node.x * this.size, node.y * this.size, this.size, this.size);
             this.nodeRectMap.set(node, rect); // Keep a map so we don't overwrite rects later when changing type
-
-            this.renderNode(node);
+            this.changeType(node);
         }
     }
 
-    renderNode(node) {
+    changeType(node) {
         let rect = this.nodeRectMap.get(node);
-        rect.attr(nodeTypeStyles[node.type]);
+        let style = nodeTypeStyles[node.type];
 
-        if (node.type === NodeType.WALL) {
-            rect.attr({transform: wallEffect.transform}).animate({transform: wallEffect.transformBack}, wallEffect.duration);
-        } else if (node.type === NodeType.EMPTY) {
-            rect.attr(nodeStateStyles[node.state]);
+        switch (node.type) {
+            case NodeType.EMPTY:
+                rect.attr($.extend(style, {transform: wallEffect.transform}))
+                    .animate({transform: wallEffect.transformBack}, wallEffect.duration);
+                break;
+            case NodeType.WALL:
+                rect.attr($.extend(style, {transform: wallEffect.transform}))
+                    .animate({transform: wallEffect.transformBack}, wallEffect.duration);
+                break;
+            case NodeType.START:
+                rect.attr(style);
+                break;
+            case NodeType.END:
+                rect.attr(style);
+                break;
         }
     }
 

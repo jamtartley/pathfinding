@@ -15,6 +15,7 @@ export default class Grid {
     }
 
     getNodeAt(x, y) {
+        if (x < 0 || y < 0 || x >= this.width || y >= this.height) return null;
         return this.nodes[y * this.width + x];
     }
 
@@ -32,7 +33,7 @@ export default class Grid {
 
     resetSearchDecorations() {
         for (let node of this.nodes) {
-            node.setState(NodeState.NONE);
+            node.state = NodeState.NONE;
             node.f = node.g = node.h = 0;
         }
     }
