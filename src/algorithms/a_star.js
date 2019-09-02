@@ -1,38 +1,37 @@
 let Heap = require("heap");
 import Grid from "../core/grid.js";
-import Node from "../core/node.js";
+import Node, { NodeState } from "../core/node.js";
 
-export function find(grid) {
+export function find(grid, heuristic) {
     let open = new Heap(function(a, b) {
         return a.f - b.f;
     });
 
     open.push(grid.start);
-    grid.start.isOpen = true;
+    grid.start.setState(NodeState.OPEN);
 
     while (open.empty() === false) {
         let q = open.pop();
-        console.log(q);
-        q.isClosed = true;
+        q.setState(NodeState.CLOSED);
 
         if (q === grid.end) return getPath(grid);
 
         let neighbours = grid.getWalkableNeighbours(q);
 
         for (let n of neighbours) {
-            if (n.isClosed) continue;
+            if (n.state === NodeState.CLOSED) continue;
 
-            let newG = q.g + euclidean(q, n);
+            let newG = q.g + ((n.x - q.x === 0 || n.y - q.y === 0) ? 1 : Math.sqrt(2));
 
-            if (!n.isOpened || newG < n.g) {
-                n.parent = q;
+            if (n.state !== NodeState.OPEN || newG < n.g) {
                 n.g = newG;
-                n.h = manhattan(q, n);
+                n.h = n.h || heuristic(n, grid.end);
                 n.f = n.g + n.h;
+                n.parent = q;
 
-                if (!n.isOpened) {
+                if (n.state !== NodeState.OPEN) {
                     open.push(n);
-                    n.isOpened = true;
+                    n.setState(NodeState.OPEN);
                 } else {
                     open.updateItem(n);
                 }
@@ -40,17 +39,7 @@ export function find(grid) {
         }
     }
 
-    return null;
-}
-
-function manhattan(a, b) {
-    return b.x - a.x + b.y - a.y;
-}
-
-function euclidean(a, b) {
-    let dx = b.x - a.x;
-    let dy = b.y - a.y;
-    return Math.sqrt(dx * dx + dy * dy);
+    return [];
 }
 
 function getPath(grid) {

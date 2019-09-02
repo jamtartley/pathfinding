@@ -1,4 +1,5 @@
 import Grid from "../core/grid.js";
+import * as Heuristics from "../core/heuristics.js";
 import { NodeType } from "../core/node.js";
 import Renderer from "./renderer.js";
 import { find as ASTAR_FIND } from "../algorithms/a_star.js";
@@ -20,7 +21,7 @@ export default class Controller {
         this.renderer = new Renderer(grid, this.size);
 
         for (let node of this.grid.nodes) {
-            node.onTypeChange = this.renderer.renderNode.bind(this.renderer);
+            node.onTypeChange = node.onStateChange = this.renderer.renderNode.bind(this.renderer);
         }
 
         let gridArea = $("#grid-area");
@@ -108,7 +109,7 @@ export default class Controller {
     search(event) {
         this.grid.resetSearchDecorations();
 
-        let path = ASTAR_FIND(this.grid);
+        let path = ASTAR_FIND(this.grid, Heuristics.manhattan);
         if (path) this.renderer.drawPath(path);
     }
 };

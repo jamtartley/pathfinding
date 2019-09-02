@@ -1,6 +1,6 @@
 import Raphael from "../lib/raphael.js";
 import Grid from "../core/grid.js";
-import { NodeType } from "../core/node.js";
+import { NodeState, NodeType } from "../core/node.js";
 
 const nodeTypeStyles = {
     [NodeType.EMPTY]: {
@@ -18,13 +18,22 @@ const nodeTypeStyles = {
     }
 };
 
-const wallEffect = {
-    duration: 150,
-    transform: "s0.6",
-    transformBack: "s1"
+const nodeStateStyles = {
+    [NodeState.NONE]: {
+        fill: "#153042",
+        "stroke": "#244153"
+    },
+    [NodeState.OPEN]: {
+        fill: "orange",
+        "stroke": "#244153"
+    },
+    [NodeState.CLOSED]: {
+        fill: "purple",
+        "stroke": "#244153"
+    }
 };
 
-const clearEffect = {
+const wallEffect = {
     duration: 150,
     transform: "s0.6",
     transformBack: "s1"
@@ -55,8 +64,8 @@ export default class Renderer {
 
         if (node.type === NodeType.WALL) {
             rect.attr({transform: wallEffect.transform}).animate({transform: wallEffect.transformBack}, wallEffect.duration);
-        } else if (node.type == NodeType.EMPTY) {
-            rect.attr({transform: clearEffect.transform}).animate({transform: clearEffect.transformBack}, clearEffect.duration);
+        } else if (node.type === NodeType.EMPTY) {
+            rect.attr(nodeStateStyles[node.state]);
         }
     }
 

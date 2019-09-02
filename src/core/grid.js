@@ -1,4 +1,4 @@
-import Node, { NodeType } from "./node.js";
+import Node, { NodeState, NodeType } from "./node.js";
 
 export default class Grid {
     constructor(width, height) {
@@ -32,8 +32,7 @@ export default class Grid {
 
     resetSearchDecorations() {
         for (let node of this.nodes) {
-            node.isOpened = false;
-            node.isClosed = false;
+            node.setState(NodeState.NONE);
             node.f = node.g = node.h = 0;
         }
     }
@@ -41,15 +40,11 @@ export default class Grid {
     getWalkableNeighbours(origin) {
         let neighbours = [
             this.getNodeAt(origin.x, origin.y - 1),
-            this.getNodeAt(origin.x + 1, origin.y - 1),
             this.getNodeAt(origin.x + 1, origin.y),
-            this.getNodeAt(origin.x + 1, origin.y + 1),
             this.getNodeAt(origin.x, origin.y + 1),
-            this.getNodeAt(origin.x - 1, origin.y + 1),
             this.getNodeAt(origin.x - 1, origin.y),
-            this.getNodeAt(origin.x - 1, origin.y - 1),
         ];
 
-        return neighbours.filter(n => n !== undefined && n.type !== NodeType.WALL);
+        return neighbours.filter(n => n && n.type !== NodeType.WALL);
     }
 };
