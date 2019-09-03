@@ -1,0 +1,35 @@
+@import "./colours";
+
+@inset: 20px;
+
+#control-panel {
+    position: absolute;
+    top: @inset;
+    left: @inset;
+    background: rgba(0, 0, 0, 0.5);
+    box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.5);
+
+    button {
+        margin: 4px;
+        padding: 8px;
+        background: white;
+        color: black;
+        outline: none;
+        cursor: pointer;
+
+        &:hover {
+            transform: scale(1.05);
+        }
+    }
+
+    hr {
+        border: none;
+        height: 2px;
+        color: @background;
+        background-color: @background;
+    }
+}
+
+#action-panel {
+    padding: 10px 20px;
+}

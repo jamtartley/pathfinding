@@ -6,7 +6,6 @@ import * as Heuristics from "../logic/heuristics.js";
 export function find(grid, options) {
     let shouldAllowDiag = options.shouldAllowDiag;
     let heuristic = options.heuristic || Heuristics.manhattan;
-    console.log(heuristic);
 
     let open = new Heap(function(a, b) {
         return a.f - b.f;
