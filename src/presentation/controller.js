@@ -10,7 +10,8 @@ const Action = Object.freeze({
     DRAGGING_START: "dragging-start",
     DRAGGING_END: "dragging-end",
     PAINTING_BLOCKS: "painting-blocks",
-    CLEARING_BLOCKS: "clearing-blocks"
+    CLEARING_BLOCKS: "clearing-blocks",
+    SEARCHING: "searching"
 });
 
 export default class Controller {
@@ -20,7 +21,7 @@ export default class Controller {
 
         this.grid = grid;
         this.renderer = new Renderer(grid, this.size);
-        this.opStack = [];
+        this.replayStack = [];
 
         for (let node of this.grid.nodes) {
             node.onTypeChange = this.renderer.changeType.bind(this.renderer);
@@ -56,15 +57,18 @@ export default class Controller {
     }
 
     onStateChange(node) {
-        this.opStack.push({node:node, state:node.state});
+        this.replayStack.push({node:node, state:node.state});
     }
 
     search(event) {
-        const opsHz = 200;
+        const replayHz = 200;
 
+        if (this.action === Action.SEARCHING) return;
+
+        this.action = Action.SEARCHING;
         this.grid.resetSearchDecorations();
         this.renderer.reset();
-        this.opStack = [];
+        this.replayStack = [];
 
         let options = {
             heuristic: Heuristics.manhattan,
@@ -73,12 +77,15 @@ export default class Controller {
         let path = AStarFind(this.grid, options);
         //let path = DijkstraFind(this.grid, options);
 
-        for (let i = 0; i < this.opStack.length; i++) {
-            let op = this.opStack[i];
+        for (let i = 0; i < this.replayStack.length; i++) {
+            let r = this.replayStack[i];
             setTimeout(() => {
-                this.renderer.showState(op.node, op.state); 
-                if (path && i === this.opStack.length - 1) this.renderer.drawPath(path);
-            }, i * (1000 / opsHz));
+                this.renderer.showState(r.node, r.state); 
+                if (path && i === this.replayStack.length - 1) {
+                    this.renderer.drawPath(path);
+                    this.action = Action.NONE;
+                }
+            }, i * (1000 / replayHz));
         }
     }
 
@@ -104,11 +111,15 @@ export default class Controller {
                     node.setType(NodeType.EMPTY);
                 }
                 break;
+            case Action.SEARCHING:
+                return;
         }
 
     }
 
     mousedown(event) {
+        if (this.action === Action.SEARCHING) return;
+
         let selectedNode = this.getNodeAtPagePos(event.pageX, event.pageY);
 
         if (selectedNode) {
