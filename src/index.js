@@ -2,6 +2,11 @@ import Grid from "./logic/grid.js";
 import * as Utils from "./logic/utils.js";
 import Controller from "./presentation/controller.js";
 
+import React from "react";
+import ReactDOM from "react-dom";
+
+import ControlPanel from "./presentation/components/control_panel.js";
+
 window.addEventListener("DOMContentLoaded", (event) => {
     let grid = new Grid(30, 20);
     let controller = new Controller(grid);
@@ -12,4 +17,6 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
     controller.setStart(grid.getNodeAt(start.x, start.y));
     controller.setEnd(grid.getNodeAt(end.x, end.y));
+
+    ReactDOM.render(<ControlPanel />, document.getElementById("control-panel"));
 });

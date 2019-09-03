@@ -19,6 +19,8 @@
     "expose-loader": "^0.7.5",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
     "style-loader": "^1.0.0",
     "webpack": "^4.39.3",
     "webpack-cli": "^3.3.7",
