@@ -14,6 +14,11 @@ const Action = Object.freeze({
     SEARCHING: "searching"
 });
 
+export const SearchType = Object.freeze({
+    ASTAR: "astar",
+    DIJKSTRA: "dijkstra"
+});
+
 export default class Controller {
     constructor(grid) {
         this.size = 40;
@@ -32,8 +37,6 @@ export default class Controller {
         gridArea.mousedown($.proxy(this.mousedown, this));
         gridArea.mouseup($.proxy(this.mouseup, this));
         gridArea.mousemove($.proxy(this.mousemove, this));
-
-        $("#search").mousedown($.proxy(this.search, this));
     }
 
     setStart(node) {
@@ -60,6 +63,16 @@ export default class Controller {
         this.replayStack.push({node:node, state:node.state});
     }
 
+    getPath(options) {
+        switch (this.searchType) {
+            default:
+            case SearchType.ASTAR:
+                return AStarFind(this.grid, options);
+            case SearchType.DIJKSTRA:
+                return DijkstraFind(this.grid, options);
+        }
+    }
+
     search(event) {
         const replayHz = 200;
 
@@ -74,8 +87,7 @@ export default class Controller {
             heuristic: Heuristics.manhattan,
             shouldAllowDiag: true 
         };
-        let path = AStarFind(this.grid, options);
-        //let path = DijkstraFind(this.grid, options);
+        let path = this.getPath(options);
 
         for (let i = 0; i < this.replayStack.length; i++) {
             let r = this.replayStack[i];

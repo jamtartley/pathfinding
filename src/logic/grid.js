@@ -34,7 +34,7 @@ export default class Grid {
     resetSearchDecorations() {
         for (let node of this.nodes) {
             node.setState(NodeState.NONE);
-            node.f = node.g = 0;
+            node.f = node.g = node.h = 0;
         }
     }
 

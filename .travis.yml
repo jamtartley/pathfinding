@@ -9,6 +9,18 @@ cache:
   - node_modules
 notifications:
   email: false
+  irc:
+    use_notice: true
+    skip_join: false
+    on_success: always
+    on_failure: always
+    template:
+    - "%{author} pushed to %{repository_slug}."
+    - "%{commit_message}"
+    - "------------------------"
+    - "See latest live version at https://path.jamtartley.com"
+    channels:
+      secure: DTiFkLnw1oR/SYiXRGbV0ngKXXBN5q59VeDdHzzelKGx8GIZblbGq3egpgXulLzCfQEZFzH2Bsfyq6mtJd0rPIRwWDHoTF799rEMdYjI73hQ17oCX5JCWjz/OFwym4yppOAhQossuo3vw3ZxdsPDRgRVv+vKDkrI10MpM7EWWUbfitNW3oSS7vWVD4zV87mG+FOhGmbEiZvXjHgwqkrsTnts3J58Fqa8rFt2lNgC5fBIIGolAtnulLsYfk+pQ9ulmkEYDQDkgKTNQLINnCVCNCoNAyjGP2cRUBSBCmKgd4rxVEgpG6wWlQok/4s2owxIVtiTKhMnL8XSV+oRnyZ/tmUD2pwuIPQ132pWcIbMiIPuiGYdpP3+viyFqcTmRflklSssaBBvJcpaXeUYi4hnMn2bCP7BBymlYEQQQs6TdxOQnT3rylxEg+HTdJkKLD88B8nnLTwK1Zm4yihM+AZbOPh6JNG6U/ceHNhcJeBkUbPVEZFA2SmYESm8W/PqBDARuksBuZOY6fvEVrXS2yZtJFmo+SMTEDJ08qkqCWw3ACGiA7c5s7O67aEP3WWaRHDkTS71wgxXVNnOQhjHWO55UiwBr2/HDvrLKI3H9h0xMm5ctxkrlMUgfCBFBY5wUiCNP8bZ1PGTaSpz9GRbWnegJm9dLJQdnKoYeU+Al7yfxFM=
 git:
   depth: false
 before_deploy:
@@ -26,8 +38,8 @@ deploy:
     repo: jamtartley/pathfinding
     branch: master
 after_deploy:
-- travis-ci-cloudfront-invalidation -a $AWS_ACCESS_KEY_ID -s $AWS_SECRET_ACCESS_KEY -c $AWS_CLOUDFRONT_DIST_ID
-  -i '/*' -b $TRAVIS_BRANCH -p $TRAVIS_PULL_REQUEST
+- travis-ci-cloudfront-invalidation -a $AWS_ACCESS_KEY_ID -s $AWS_SECRET_ACCESS_KEY
+  -c $AWS_CLOUDFRONT_DIST_ID -i '/*' -b $TRAVIS_BRANCH -p $TRAVIS_PULL_REQUEST
 env:
   global:
   - secure: ItAojlfKzBuzqBW0lS9IfVv0cmPaoKG4EpfCQUb7d8VabLwQWN4uaiAb3fnu2uNQA4SZMZ203/qh+PHsP0RggwgXQYWxnFZKFQ24jeBb1QFHi1KP+3BCzxch9fD+8uPl8jCr27j0Yxalf9hodsbrfiJILqsormHMitq6UEs881p0NCZkUo5zG4OQuUNpicD39g8upn0XQrtYbG38NPPtrUUFBHrNTDwy9MuDKw8jaznS8/yn4rLkXEOUz+DIqduUZAmQzmoCaDrzywuZa4GnS7uWMsSx2usdSciwPEQQUoM0ZJNdjhBceJBmtg8xm+ix0fYNhC6Tz2WvZKYDu3JtdJ2AhgC1QasjDqvxfehajbv6Su9IcOREmC9Bmk403P9pksMGaL163XSBd/zL3WVzbVwO5ODeVwFezegU2Z4YtlWI75UsvdF/G56lsHLVy9Ov4zn9sbUK+GABTcRC4SMW57HI4tvgObSgt0mXTTtiotHS71WQsrk8Kjqw85IPb/nhoi+wIQAYrkvQEvQHRoVcLLG13ooUKc8hq8T5nlLEyMh7I1RzpWLbiBdtN+rYotuzEK8TYKatafx23qLV64VuHljF0s2sTu5QR6uVf/zOXJwkU6zb8myWs/HWS13XzRnwnfL5qeqvWou40XVJcIyW6EG+nu27pnSShO8JgX817A4=
