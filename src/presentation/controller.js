@@ -2,7 +2,8 @@ import Grid from "../logic/grid.js";
 import * as Heuristics from "../logic/heuristics.js";
 import { NodeType } from "../logic/node.js";
 import Renderer from "./renderer.js";
-import { find as ASTAR_FIND } from "../algorithms/a_star.js";
+import { find as AStarFind } from "../algorithms/a_star.js";
+import { find as DijkstraFind } from "../algorithms/dijkstra.js";
 
 const Action = Object.freeze({
     NONE: "none",
@@ -69,7 +70,7 @@ export default class Controller {
             heuristic: Heuristics.manhattan,
             shouldAllowDiag: false 
         };
-        let path = ASTAR_FIND(this.grid, options);
+        let path = DijkstraFind(this.grid, options);
 
         for (let i = 0; i < this.opStack.length; i++) {
             let op = this.opStack[i];

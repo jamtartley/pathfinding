@@ -8,7 +8,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
     let start = { x: Utils.getRandInt(0, grid.width - 1), y: Utils.getRandInt(0, grid.height - 1) };
     let end = { x: Utils.getRandInt(0, grid.width - 1), y: Utils.getRandInt(0, grid.height - 1) };
-    while (end.x === start.x && end.y === start.y) end = { x: Utils.getRandInt(5, 20), y: Utils.getRandInt(5, 15) };
+    while (end.x === start.x && end.y === start.y) end = { x: Utils.getRandInt(0, grid.width - 1), y: Utils.getRandInt(0, grid.height - 1) };
 
     controller.setStart(grid.getNodeAt(start.x, start.y));
     controller.setEnd(grid.getNodeAt(end.x, end.y));

@@ -25,7 +25,7 @@ export function find(grid, options) {
         for (let n of neighbours) {
             if (n.state === NodeState.CLOSED) continue;
 
-            let newG = grid.start.g + ((n.x - grid.start.x === 0 || n.y - grid.start.y === 0) ? 1 : Math.sqrt(2));
+            let newG = origin.g + ((n.x - grid.start.x === 0 || n.y - grid.start.y === 0) ? 1 : Math.sqrt(2));
 
             if (n.state !== NodeState.OPEN || newG < n.g) {
                 n.g = newG;
