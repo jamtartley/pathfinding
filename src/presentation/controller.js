@@ -1,7 +1,9 @@
+import Renderer from "./renderer.js";
+
 import Grid from "../logic/grid.js";
 import * as Heuristics from "../logic/heuristics.js";
 import { NodeType } from "../logic/node.js";
-import Renderer from "./renderer.js";
+
 import { find as AStarFind } from "../algorithms/a_star.js";
 import { find as DijkstraFind } from "../algorithms/dijkstra.js";
 
@@ -19,10 +21,17 @@ export const SearchType = Object.freeze({
     DIJKSTRA: "dijkstra"
 });
 
+const searchFunctionMap = {
+    [SearchType.ASTAR]: AStarFind,
+    [SearchType.DIJKSTRA]: DijkstraFind,
+};
+
 export default class Controller {
     constructor(grid) {
         this.size = 40;
         this.action = Action.NONE;
+
+        this.searchType = SearchType.ASTAR;
 
         this.grid = grid;
         this.renderer = new Renderer(grid, this.size);
@@ -63,16 +72,6 @@ export default class Controller {
         this.replayStack.push({node:node, state:node.state});
     }
 
-    getPath(options) {
-        switch (this.searchType) {
-            default:
-            case SearchType.ASTAR:
-                return AStarFind(this.grid, options);
-            case SearchType.DIJKSTRA:
-                return DijkstraFind(this.grid, options);
-        }
-    }
-
     search(event) {
         const replayHz = 200;
 
@@ -84,10 +83,10 @@ export default class Controller {
         this.replayStack = [];
 
         let options = {
-            heuristic: Heuristics.manhattan,
+            heuristic: Heuristics.HeuristicFunctionMap[this.heuristicType],
             shouldAllowDiag: true 
         };
-        let path = this.getPath(options);
+        let path = searchFunctionMap[this.searchType](this.grid, options);
 
         for (let i = 0; i < this.replayStack.length; i++) {
             let r = this.replayStack[i];
@@ -104,24 +103,16 @@ export default class Controller {
     actOnNode(node) {
         switch (this.action) {
             case Action.DRAGGING_START:
-                if (node.type === NodeType.EMPTY) {
-                    this.setStart(node);
-                }
+                if (node.type === NodeType.EMPTY) this.setStart(node);
                 break;
             case Action.DRAGGING_END:
-                if (node.type === NodeType.EMPTY) {
-                    this.setEnd(node);
-                }
+                if (node.type === NodeType.EMPTY) this.setEnd(node);
                 break;
             case Action.PAINTING_BLOCKS:
-                if (node.type === NodeType.EMPTY) {
-                    node.setType(NodeType.BLOCK);
-                }
+                if (node.type === NodeType.EMPTY) node.setType(NodeType.BLOCK);
                 break;
             case Action.CLEARING_BLOCKS:
-                if (node.type === NodeType.BLOCK) {
-                    node.setType(NodeType.EMPTY);
-                }
+                if (node.type === NodeType.BLOCK) node.setType(NodeType.EMPTY);
                 break;
             case Action.SEARCHING:
                 return;

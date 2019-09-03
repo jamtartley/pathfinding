@@ -1,3 +1,15 @@
+export const HeuristicType = Object.freeze({
+    MANHATTAN: "manhattan",
+    EUCLIDEAN: "euclidean",
+    OCTILE: "octile"
+});
+
+export const HeuristicFunctionMap = {
+    [HeuristicType.MANHATTAN]: manhattan,
+    [HeuristicType.EUCLIDEAN]: euclidean,
+    [HeuristicType.OCTILE]: octile,
+};
+
 export function manhattan(a, b) {
     let dx = Math.abs(b.x - a.x);
     let dy = Math.abs(b.y - a.y);

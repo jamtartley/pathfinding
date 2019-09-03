@@ -1,4 +1,5 @@
 import Raphael from "../lib/raphael.js";
+
 import Grid from "../logic/grid.js";
 import { NodeState, NodeType } from "../logic/node.js";
 
