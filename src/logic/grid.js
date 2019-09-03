@@ -34,7 +34,7 @@ export default class Grid {
     resetSearchDecorations() {
         for (let node of this.nodes) {
             node.setState(NodeState.NONE);
-            node.f = node.g = node.h = 0;
+            node.f = node.g = 0;
         }
     }
 
@@ -47,10 +47,10 @@ export default class Grid {
         ];
 
         if (shouldIncludeDiag) {
+            neighbours.push(this.getNodeAt(origin.x - 1, origin.y - 1)),
             neighbours.push(this.getNodeAt(origin.x + 1, origin.y - 1)),
             neighbours.push(this.getNodeAt(origin.x + 1, origin.y + 1)),
-            neighbours.push(this.getNodeAt(origin.x - 1, origin.y + 1)),
-            neighbours.push(this.getNodeAt(origin.x - 1, origin.y - 1))
+            neighbours.push(this.getNodeAt(origin.x - 1, origin.y + 1))
         }
 
         return neighbours.filter(n => n && n.type !== NodeType.BLOCK);

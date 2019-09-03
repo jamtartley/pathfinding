@@ -68,9 +68,10 @@ export default class Controller {
 
         let options = {
             heuristic: Heuristics.manhattan,
-            shouldAllowDiag: false 
+            shouldAllowDiag: true 
         };
-        let path = DijkstraFind(this.grid, options);
+        let path = AStarFind(this.grid, options);
+        //let path = DijkstraFind(this.grid, options);
 
         for (let i = 0; i < this.opStack.length; i++) {
             let op = this.opStack[i];
