@@ -8,8 +8,8 @@ const solvedLine = {
     "stroke-width": 5,
     opacity: 0
 };
-const wallEffect = {
-    duration: 150,
+const blockEffect = {
+    duration: 250,
     transform: "s0.6",
     transformBack: "s1"
 };
@@ -19,7 +19,7 @@ const nodeTypeStyles = {
         fill: "#153042",
         stroke: strokeColour
     },
-    [NodeType.WALL]: {
+    [NodeType.BLOCK]: {
         fill: "#081F2D",
         stroke: strokeColour
     },
@@ -69,12 +69,12 @@ export default class Renderer {
 
         switch (node.type) {
             case NodeType.EMPTY:
-                rect.attr($.extend({}, style, {transform: wallEffect.transform}))
-                    .animate({transform: wallEffect.transformBack}, wallEffect.duration);
+                rect.attr($.extend({}, style, {transform: blockEffect.transform}))
+                    .animate({transform: blockEffect.transformBack}, blockEffect.duration);
                 break;
-            case NodeType.WALL:
-                rect.attr($.extend({}, style, {transform: wallEffect.transform}))
-                    .animate({transform: wallEffect.transformBack}, wallEffect.duration);
+            case NodeType.BLOCK:
+                rect.attr($.extend({}, style, {transform: blockEffect.transform}))
+                    .animate({transform: blockEffect.transformBack}, blockEffect.duration);
                 break;
             case NodeType.START:
                 rect.attr(style);

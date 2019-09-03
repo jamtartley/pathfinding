@@ -24,7 +24,7 @@ export default class Grid {
     }
 
     canWalkAt(x, y) {
-        return this.isInGrid && this.getNodeAt(x, y).type !== NodeType.WALL;
+        return this.isInGrid && this.getNodeAt(x, y).type !== NodeType.BLOCK;
     }
 
     isInGrid(x, y) {
@@ -38,19 +38,21 @@ export default class Grid {
         }
     }
 
-    getWalkableNeighbours(origin) {
+    getWalkableNeighbours(origin, shouldIncludeDiag) {
         let neighbours = [
             this.getNodeAt(origin.x, origin.y - 1),
             this.getNodeAt(origin.x + 1, origin.y),
             this.getNodeAt(origin.x, origin.y + 1),
             this.getNodeAt(origin.x - 1, origin.y),
-
-            this.getNodeAt(origin.x + 1, origin.y - 1),
-            this.getNodeAt(origin.x + 1, origin.y + 1),
-            this.getNodeAt(origin.x - 1, origin.y + 1),
-            this.getNodeAt(origin.x - 1, origin.y - 1),
         ];
 
-        return neighbours.filter(n => n && n.type !== NodeType.WALL);
+        if (shouldIncludeDiag) {
+            neighbours.push(this.getNodeAt(origin.x + 1, origin.y - 1)),
+            neighbours.push(this.getNodeAt(origin.x + 1, origin.y + 1)),
+            neighbours.push(this.getNodeAt(origin.x - 1, origin.y + 1)),
+            neighbours.push(this.getNodeAt(origin.x - 1, origin.y - 1))
+        }
+
+        return neighbours.filter(n => n && n.type !== NodeType.BLOCK);
     }
 };

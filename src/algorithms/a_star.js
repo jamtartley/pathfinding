@@ -1,8 +1,12 @@
 let Heap = require("heap");
 import Grid from "../logic/grid.js";
 import Node, { NodeState } from "../logic/node.js";
+import * as Heuristics from "../logic/heuristics.js";
 
-export function find(grid, heuristic) {
+export function find(grid, options) {
+    let heuristic = options.heuristic || Heuristics.manhattan;
+    let shouldAllowDiag = options.shouldAllowDiag;
+
     let open = new Heap(function(a, b) {
         return a.f - b.f;
     });
@@ -16,7 +20,7 @@ export function find(grid, heuristic) {
 
         if (origin === grid.end) return getPath(grid);
 
-        let neighbours = grid.getWalkableNeighbours(origin);
+        let neighbours = grid.getWalkableNeighbours(origin, shouldAllowDiag);
 
         for (let n of neighbours) {
             if (n.state === NodeState.CLOSED) continue;

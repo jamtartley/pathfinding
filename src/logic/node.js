@@ -1,6 +1,6 @@
 export const NodeType = Object.freeze({
     EMPTY: "empty",
-    WALL: "wall",
+    BLOCK: "block",
     START: "start",
     END: "end"
 });

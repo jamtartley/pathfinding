@@ -8,8 +8,8 @@ const Action = Object.freeze({
     NONE: "none",
     DRAGGING_START: "dragging-start",
     DRAGGING_END: "dragging-end",
-    PAINTING_WALLS: "painting-walls",
-    CLEARING_WALLS: "clearing-walls"
+    PAINTING_BLOCKS: "painting-blocks",
+    CLEARING_BLOCKS: "clearing-blocks"
 });
 
 export default class Controller {
@@ -65,7 +65,11 @@ export default class Controller {
         this.renderer.reset();
         this.opStack = [];
 
-        let path = ASTAR_FIND(this.grid, Heuristics.euclidean);
+        let options = {
+            heuristic: Heuristics.manhattan,
+            shouldAllowDiag: false 
+        };
+        let path = ASTAR_FIND(this.grid, options);
 
         for (let i = 0; i < this.opStack.length; i++) {
             let op = this.opStack[i];
@@ -88,13 +92,13 @@ export default class Controller {
                     this.setEnd(node);
                 }
                 break;
-            case Action.PAINTING_WALLS:
+            case Action.PAINTING_BLOCKS:
                 if (node.type === NodeType.EMPTY) {
-                    node.setType(NodeType.WALL);
+                    node.setType(NodeType.BLOCK);
                 }
                 break;
-            case Action.CLEARING_WALLS:
-                if (node.type === NodeType.WALL) {
+            case Action.CLEARING_BLOCKS:
+                if (node.type === NodeType.BLOCK) {
                     node.setType(NodeType.EMPTY);
                 }
                 break;
@@ -114,10 +118,10 @@ export default class Controller {
                     this.action = Action.DRAGGING_END;
                     break;
                 case NodeType.EMPTY:
-                    this.action = Action.PAINTING_WALLS;
+                    this.action = Action.PAINTING_BLOCKS;
                     break;
-                case NodeType.WALL:
-                    this.action = Action.CLEARING_WALLS;
+                case NodeType.BLOCK:
+                    this.action = Action.CLEARING_BLOCKS;
                     break;
             }
 

@@ -1,6 +1,6 @@
 import Grid from "./logic/grid.js";
 import * as Utils from "./logic/utils.js";
-import Controller from "./vis/controller.js";
+import Controller from "./presentation/controller.js";
 
 window.addEventListener("DOMContentLoaded", (event) => {
     let grid = new Grid(30, 20);
