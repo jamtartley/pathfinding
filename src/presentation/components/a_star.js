@@ -11,11 +11,11 @@ export default class AStar extends React.Component {
             <React.Fragment>
                 <h3 className="section-header" data-search={this.props.type}>A*</h3>
                 <div className="section-inner">
-                    <Heuristics initialHeuristic={this.props.startOpts.heuristic}/>
+                    <Heuristics initialHeuristic={this.props.startOpts.heuristic.type}/>
                     <header>
                         Options
                     </header>
-                    <Toggle value={"shouldAllowDiag"} text={"Should allow diagonal"} defaultChecked={this.props.startOpts.shouldAllowDiag}/>
+                    <Toggle value={"canMoveDiag"} text={"Can move diagonally"} defaultChecked={this.props.startOpts.canMoveDiag}/>
                 </div>
             </React.Fragment>
         );

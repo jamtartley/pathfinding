@@ -4,8 +4,8 @@ import Node, { NodeState } from "../logic/node.js";
 import * as Heuristics from "../logic/heuristics.js";
 
 export function find(grid, options) {
-    let shouldAllowDiag = options.shouldAllowDiag;
-    let heuristic = Heuristics.HeuristicFunctionMap[options.heuristic || Heuristics.manhattan];
+    let canMoveDiag = options.canMoveDiag;
+    let heuristic = Heuristics.HeuristicFunctionMap[options.heuristic.type || Heuristics.HeuristicType.MANHATTAN];
 
     let open = new Heap(function(a, b) {
         return a.f - b.f;
@@ -20,7 +20,7 @@ export function find(grid, options) {
 
         if (origin === grid.end) return getPath(grid);
 
-        let neighbours = grid.getWalkableNeighbours(origin, shouldAllowDiag);
+        let neighbours = grid.getWalkableNeighbours(origin, canMoveDiag);
 
         for (let n of neighbours) {
             if (n.state === NodeState.CLOSED) continue;
@@ -29,7 +29,7 @@ export function find(grid, options) {
 
             if (n.state !== NodeState.OPEN || newG < n.g) {
                 n.g = newG;
-                n.h = n.h || heuristic(n, grid.end);
+                n.h = n.h || heuristic(n, grid.end, options.heuristic.weight);
                 n.f = n.g + n.h;
                 n.parent = origin;
 

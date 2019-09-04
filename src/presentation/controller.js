@@ -6,6 +6,7 @@ import { NodeType } from "../logic/node.js";
 
 import { find as AStarFind } from "../algorithms/a_star.js";
 import { find as DijkstraFind } from "../algorithms/dijkstra.js";
+import { find as BestFirstFind } from "../algorithms/best_first.js";
 
 import store from "../redux/store.js";
 
@@ -20,12 +21,14 @@ const Action = Object.freeze({
 
 export const SearchType = Object.freeze({
     ASTAR: "astar",
-    DIJKSTRA: "dijkstra"
+    DIJKSTRA: "dijkstra",
+    BEST_FIRST: "best-first"
 });
 
 const searchFunctionMap = {
     [SearchType.ASTAR]: AStarFind,
     [SearchType.DIJKSTRA]: DijkstraFind,
+    [SearchType.BEST_FIRST]: BestFirstFind,
 };
 
 export default class Controller {

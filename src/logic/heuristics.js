@@ -2,7 +2,8 @@ export const HeuristicType = Object.freeze({
     NONE: "none",
     MANHATTAN: "manhattan",
     EUCLIDEAN: "euclidean",
-    OCTILE: "octile"
+    OCTILE: "octile",
+    CHEBYSHEV: "chebyshev"
 });
 
 export const HeuristicFunctionMap = {
@@ -10,29 +11,36 @@ export const HeuristicFunctionMap = {
     [HeuristicType.MANHATTAN]: manhattan,
     [HeuristicType.EUCLIDEAN]: euclidean,
     [HeuristicType.OCTILE]: octile,
+    [HeuristicType.CHEBYSHEV]: chebyshev,
 };
 
-export function manhattan(a, b) {
+function manhattan(a, b, d = 1) {
     let dx = Math.abs(b.x - a.x);
     let dy = Math.abs(b.y - a.y);
 
-    return dx + dy;
+    return d * (dx + dy);
 }
 
-export function euclidean(a, b) {
+function euclidean(a, b, d = 1) {
     let dx = Math.abs(b.x - a.x);
     let dy = Math.abs(b.y - a.y);
 
-    return Math.sqrt(dx * dx + dy * dy);
+    return d * Math.sqrt(dx * dx + dy * dy);
 }
 
-export function octile(a, b) {
+function octile(a, b) {
+    return diagRoot(a, b, 1, 1);
+}
+
+function chebyshev(a, b) {
+    return diagRoot(a, b, 1, Math.sqrt(2));
+}
+
+function diagRoot(a, b, d, d2) {
     let dx = Math.abs(b.x - a.x);
     let dy = Math.abs(b.y - a.y);
-    let factor = Math.sqrt(2) - 1;
 
-    if (dx < dy) return factor * dx + dy;
-    else return factor * dy + dx;
+    return d * (dx + dy) + (d2 - 2 * d) + Math.min(dx, dy);
 }
 
 export function none(a, b) {

@@ -16,9 +16,9 @@ export function changeSearchType(type) {
     };
 }
 
-export function changeAllowDiag(shouldAllow) {
+export function changeAllowDiag(canMove) {
     return {
         type: CHANGE_ALLOW_DIAG,
-        payload: shouldAllow
+        payload: canMove
     };
 }

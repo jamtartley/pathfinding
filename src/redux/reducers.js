@@ -6,18 +6,27 @@ import * as Actions from "./actions.js";
 const initialState = {
     type: SearchType.ASTAR,
     [SearchType.ASTAR]: {
-        heuristic: HeuristicType.MANHATTAN,
-        shouldAllowDiag: true
+        heuristic: {
+            type: HeuristicType.MANHATTAN,
+            weight: 1
+        },
+        canMoveDiag: true
+    },
+    [SearchType.BEST_FIRST]: {
+        heuristic: {
+            type: HeuristicType.MANHATTAN,
+            weight: 1
+        },
+        canMoveDiag: true
     },
     [SearchType.DIJKSTRA]: {
-        shouldAllowDiag: true
+        canMoveDiag: true
     },
 };
 
 function reducer(state = initialState, action) {
     switch (action.type) {
         case Actions.CHANGE_SEARCH_TYPE:
-            console.log(action.payload);
             return Object.assign({}, state, {
                 ...state,
                 type: action.payload
@@ -26,14 +35,17 @@ function reducer(state = initialState, action) {
             return Object.assign({}, state, {
                 [state.type]: {
                     ...state[state.type],
-                    heuristic: action.payload
+                    heuristic: {
+                        ...state[state.type].heuristic,
+                        type: action.payload
+                    }
                 }
             });
         case Actions.CHANGE_ALLOW_DIAG:
             return Object.assign({}, state, {
                 [state.type]: {
                     ...state[state.type],
-                    shouldAllowDiag: action.payload
+                    canMoveDiag: action.payload
                 }
             });
         default:
