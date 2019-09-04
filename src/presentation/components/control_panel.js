@@ -11,7 +11,6 @@ export default class ControlPanel extends React.Component {
         return (
             <React.Fragment>
                 <SearchPanel controller={this.props.controller}/>
-                <hr/>
                 <ActionPanel controller={this.props.controller}/>
             </React.Fragment>
         );

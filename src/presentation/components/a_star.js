@@ -7,7 +7,6 @@ import Toggle from "./toggle.js";
 
 export default class AStar extends React.Component {
     render() {
-        console.log(this.props.startOpts);
         return (
             <React.Fragment>
                 <h3 className="section-header" data-search={this.props.type}>A*</h3>

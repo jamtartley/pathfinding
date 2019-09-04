@@ -38,6 +38,10 @@ module.exports = {
                         }
                     }
                 ]
+            },
+            {
+                test: /\.(eot|png|jp(e*)g|svg|ttf|otf|woff|woff2)$/,
+                loader: "url-loader?limit=100000&mimetype=application/font-woff"
             }
         ]
     }

@@ -30,7 +30,7 @@ const searchFunctionMap = {
 
 export default class Controller {
     constructor(grid) {
-        this.size = 40;
+        this.size = 50;
         this.action = Action.NONE;
 
         this.grid = grid;

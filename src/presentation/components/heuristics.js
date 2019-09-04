@@ -14,11 +14,15 @@ export default class Heuristics extends React.Component {
         });
     }
 
+    toDisplay(raw) {
+        return raw.charAt(0).toUpperCase() + raw.slice(1);
+    }
+
     render() {
         let options = Object.keys(HeuristicType).map(key =>
             <label key={key}>
                 <input type="radio" value={HeuristicType[key]} name="heuristic" defaultChecked={HeuristicType[key]===this.props.initialHeuristic}/>
-                {HeuristicType[key]}
+                {this.toDisplay(HeuristicType[key])}
             </label>
         );
 
