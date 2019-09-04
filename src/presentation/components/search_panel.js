@@ -19,10 +19,12 @@ export default class SearchPanel extends React.Component {
     }
 
     render() {
+        let options = store.getState();
+
         return (
             <div id="search-panel">
-                <AStar controller={this.props.controller} type={SearchType.ASTAR}/>
-                <Dijkstra controller={this.props.controller} type={SearchType.DIJKSTRA}/>
+                <AStar type={SearchType.ASTAR} startOpts={options[SearchType.ASTAR]}/>
+                <Dijkstra type={SearchType.DIJKSTRA} startOpts={options[SearchType.DIJKSTRA]}/>
             </div>
         );
     }

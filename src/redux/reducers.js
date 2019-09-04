@@ -1,6 +1,4 @@
-import { combineReducers } from "redux";
-
-import { HeuristicType, HeuristicFunctionMap } from "../logic/heuristics.js";
+import { HeuristicType } from "../logic/heuristics.js";
 import { SearchType } from "../presentation/controller.js";
 
 import * as Actions from "./actions.js";
@@ -8,7 +6,7 @@ import * as Actions from "./actions.js";
 const initialState = {
     type: SearchType.ASTAR,
     [SearchType.ASTAR]: {
-        heuristic: HeuristicFunctionMap[HeuristicType.MANHATTAN],
+        heuristic: HeuristicType.MANHATTAN,
         shouldAllowDiag: true
     },
     [SearchType.DIJKSTRA]: {
@@ -19,14 +17,23 @@ const initialState = {
 function reducer(state = initialState, action) {
     switch (action.type) {
         case Actions.CHANGE_SEARCH_TYPE:
+            console.log(action.payload);
             return Object.assign({}, state, {
+                ...state,
                 type: action.payload
             });
         case Actions.CHANGE_HEURISTIC:
             return Object.assign({}, state, {
                 [state.type]: {
                     ...state[state.type],
-                    heuristic: HeuristicFunctionMap[action.payload]
+                    heuristic: action.payload
+                }
+            });
+        case Actions.CHANGE_ALLOW_DIAG:
+            return Object.assign({}, state, {
+                [state.type]: {
+                    ...state[state.type],
+                    shouldAllowDiag: action.payload
                 }
             });
         default:

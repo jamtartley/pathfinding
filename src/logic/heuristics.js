@@ -1,10 +1,12 @@
 export const HeuristicType = Object.freeze({
+    NONE: "none",
     MANHATTAN: "manhattan",
     EUCLIDEAN: "euclidean",
     OCTILE: "octile"
 });
 
 export const HeuristicFunctionMap = {
+    [HeuristicType.NONE]: none,
     [HeuristicType.MANHATTAN]: manhattan,
     [HeuristicType.EUCLIDEAN]: euclidean,
     [HeuristicType.OCTILE]: octile,
@@ -31,4 +33,8 @@ export function octile(a, b) {
 
     if (dx < dy) return factor * dx + dy;
     else return factor * dy + dx;
+}
+
+export function none(a, b) {
+    return 0;
 }

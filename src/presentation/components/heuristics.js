@@ -17,7 +17,7 @@ export default class Heuristics extends React.Component {
     render() {
         let options = Object.keys(HeuristicType).map(key =>
             <label key={key}>
-                <input type="radio" value={HeuristicType[key]} name="heuristic"/>
+                <input type="radio" value={HeuristicType[key]} name="heuristic" defaultChecked={HeuristicType[key]===this.props.initialHeuristic}/>
                 {HeuristicType[key]}
             </label>
         );

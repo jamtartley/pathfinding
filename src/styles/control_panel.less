@@ -29,6 +29,7 @@
         height: 2px;
         color: @background;
         background-color: @background;
+        margin: 0;
     }
 }
 
@@ -52,14 +53,19 @@
 }
 
 .section-inner {
+    color: @text;
+
     form {
         display: flex;
         flex-direction: column;
-        color: @text;
+    }
 
-        header {
-            margin: 8px 0;
-            font-size: 1.5em;
-        }
+    header {
+        margin: 16px 0;
+        font-size: 1.3em;
+    }
+
+    input {
+        margin: 4px 16px 0 0;
     }
 }
