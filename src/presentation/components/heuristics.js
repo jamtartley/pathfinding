@@ -17,6 +17,9 @@ export default class Heuristics extends React.Component {
 
         return (
             <form name="heuristics-selection">
+            <header>
+                Heuristic
+            </header>
                 { options }
             </form>
         );

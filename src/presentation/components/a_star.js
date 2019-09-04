@@ -7,7 +7,7 @@ export default class AStar extends React.Component {
         return (
             <React.Fragment>
                 <h3 className="section-header" data-search={this.props.type}>A*</h3>
-                <div>
+                <div className="section-inner">
                     <Heuristics controller={this.props.controller}/>
                 </div>
             </React.Fragment>
