@@ -79,12 +79,17 @@ export default class Controller {
     }
 
     removeBlocks() {
+        this.grid.resetSearchDecorations();
+        this.renderer.reset();
+
         for (let node of this.grid.nodes) {
             if (node.type === NodeType.BLOCK) node.setType(NodeType.EMPTY);
         }
     }
 
     placeRandomBlocks() {
+        this.grid.resetSearchDecorations();
+        this.renderer.reset();
         this.removeBlocks();
 
         const maxCoverage = 0.75;
@@ -105,6 +110,9 @@ export default class Controller {
     }
 
     randomiseStartAndEnd() {
+        this.grid.resetSearchDecorations();
+        this.renderer.reset();
+
         let start = this.grid.getNodeAt(this.getRandX(), this.getRandY());
         let end = this.grid.getNodeAt(this.getRandX(), this.getRandY());
 
@@ -118,6 +126,11 @@ export default class Controller {
 
     search(event) {
         if (this.action === Action.SEARCHING) return;
+
+        const panelAnim = 150;
+        const controlPanel = $("#control-panel");
+
+        controlPanel.fadeOut(panelAnim);
 
         const replayHz = 200;
 
@@ -137,6 +150,7 @@ export default class Controller {
                 if (path && i === this.replayStack.length - 1) {
                     this.renderer.drawPath(path);
                     this.action = Action.NONE;
+                    controlPanel.fadeIn(panelAnim);
                 }
             }, i * (1000 / replayHz));
         }
