@@ -3,6 +3,7 @@ import Renderer from "./renderer.js";
 import Grid from "../logic/grid.js";
 import * as Heuristics from "../logic/heuristics.js";
 import { NodeType } from "../logic/node.js";
+import * as Utils from "../logic/utils.js";
 
 import { find as AStarFind } from "../algorithms/a_star.js";
 import { find as DijkstraFind } from "../algorithms/dijkstra.js";
@@ -49,6 +50,8 @@ export default class Controller {
         gridArea.mousedown($.proxy(this.mousedown, this));
         gridArea.mouseup($.proxy(this.mouseup, this));
         gridArea.mousemove($.proxy(this.mousemove, this));
+
+        this.randomiseStartAndEnd();
     }
 
     setStart(node) {
@@ -75,10 +78,48 @@ export default class Controller {
         this.replayStack.push({node:node, state:node.state});
     }
 
-    search(event) {
-        const replayHz = 200;
+    removeBlocks() {
+        for (let node of this.grid.nodes) {
+            if (node.type === NodeType.BLOCK) node.setType(NodeType.EMPTY);
+        }
+    }
 
+    placeRandomBlocks() {
+        this.removeBlocks();
+
+        const maxCoverage = 0.75;
+        const endIdx = Utils.getRandInt(0, maxCoverage * this.grid.nodes.length);
+
+        for (let i = 0; i < endIdx; i++) {
+            let node = this.grid.getNodeAt(this.getRandX(), this.getRandY());
+            if (node.type === NodeType.EMPTY) node.setType(NodeType.BLOCK);
+        }
+    }
+
+    getRandX() {
+        return Utils.getRandInt(0, this.grid.width - 1);
+    }
+
+    getRandY() {
+        return Utils.getRandInt(0, this.grid.height - 1);
+    }
+
+    randomiseStartAndEnd() {
+        let start = this.grid.getNodeAt(this.getRandX(), this.getRandY());
+        let end = this.grid.getNodeAt(this.getRandX(), this.getRandY());
+
+        while (start === end) {
+            end = this.grid.getNodeAt(this.getRandX(), this.getRandY());
+        }
+
+        this.setStart(start);
+        this.setEnd(end);
+    }
+
+    search(event) {
         if (this.action === Action.SEARCHING) return;
+
+        const replayHz = 200;
 
         this.action = Action.SEARCHING;
         this.grid.resetSearchDecorations();
