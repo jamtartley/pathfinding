@@ -1,10 +1,12 @@
 import React from "react";
 
 import { HeuristicType } from "../../logic/heuristics.js";
+import { changeCurrentHeuristic } from "../../redux/actions.js";
+import store from "../../redux/store.js";
 
 export default class Heuristics extends React.Component {
     onHeuristicChange(e) {
-        this.props.controller.heuristicType = e.currentTarget.value;
+        store.dispatch(changeCurrentHeuristic(e.currentTarget.value));
     }
 
     render() {
