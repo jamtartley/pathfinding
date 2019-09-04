@@ -7,6 +7,8 @@ import { NodeType } from "../logic/node.js";
 import { find as AStarFind } from "../algorithms/a_star.js";
 import { find as DijkstraFind } from "../algorithms/dijkstra.js";
 
+import store from "../redux/store.js";
+
 const Action = Object.freeze({
     NONE: "none",
     DRAGGING_START: "dragging-start",
@@ -30,8 +32,6 @@ export default class Controller {
     constructor(grid) {
         this.size = 40;
         this.action = Action.NONE;
-
-        this.searchType = SearchType.ASTAR;
 
         this.grid = grid;
         this.renderer = new Renderer(grid, this.size);
@@ -82,16 +82,14 @@ export default class Controller {
         this.renderer.reset();
         this.replayStack = [];
 
-        let options = {
-            heuristic: Heuristics.HeuristicFunctionMap[this.heuristicType],
-            shouldAllowDiag: true 
-        };
-        let path = searchFunctionMap[this.searchType](this.grid, options);
+        let state = store.getState();
+        let type = state.type;
+        let path = searchFunctionMap[type](this.grid, state[type]);
 
         for (let i = 0; i < this.replayStack.length; i++) {
             let r = this.replayStack[i];
             setTimeout(() => {
-                this.renderer.showState(r.node, r.state); 
+                this.renderer.showState(r.node, r.state);
                 if (path && i === this.replayStack.length - 1) {
                     this.renderer.drawPath(path);
                     this.action = Action.NONE;

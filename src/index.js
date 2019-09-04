@@ -1,8 +1,9 @@
 import Grid from "./logic/grid.js";
 import * as Utils from "./logic/utils.js";
-import Controller from "./presentation/controller.js";
 
 import store from "./redux/store.js";
+
+import Controller from "./presentation/controller.js";
 
 import React from "react";
 import ReactDOM from "react-dom";

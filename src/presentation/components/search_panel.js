@@ -4,13 +4,16 @@ import Dijkstra from "./dijkstra.js";
 
 import { SearchType } from "../controller.js";
 
+import store from "../../redux/store.js";
+import { changeSearchType } from "../../redux/actions.js";
+
 export default class SearchPanel extends React.Component {
     componentDidMount() {
         $("#search-panel").accordion({
             animate: 200,
             active: 0,
             activate: function (event, ui) {
-                this.props.controller.searchType = ui.newHeader.data("search");
+                store.dispatch(changeSearchType(ui.newHeader.data("search")));
             }.bind(this)
         });
     }
