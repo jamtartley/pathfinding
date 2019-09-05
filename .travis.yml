@@ -24,6 +24,7 @@ notifications:
 git:
   depth: false
 before_deploy:
+- npm run test
 - npm run prod
 deploy:
   provider: s3

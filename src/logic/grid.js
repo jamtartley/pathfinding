@@ -19,12 +19,18 @@ export default class Grid {
         return this.nodes[y * this.width + x];
     }
 
+    clearAllBlocks() {
+        for (let node of this.nodes) {
+            if (node.type === NodeType.BLOCK) node.setType(NodeType.EMPTY);
+        }
+    }
+
     getNodesByType(type) {
         return this.nodes.filter(n => n.type == type);
     }
 
     canWalkAt(x, y) {
-        return this.isInGrid && this.getNodeAt(x, y).type !== NodeType.BLOCK;
+        return this.isInGrid(x, y) && this.getNodeAt(x, y).type !== NodeType.BLOCK;
     }
 
     isInGrid(x, y) {

@@ -81,10 +81,7 @@ export default class Controller {
     removeBlocks() {
         this.grid.resetSearchDecorations();
         this.renderer.reset();
-
-        for (let node of this.grid.nodes) {
-            if (node.type === NodeType.BLOCK) node.setType(NodeType.EMPTY);
-        }
+        this.grid.clearAllBlocks();
     }
 
     placeRandomBlocks() {
