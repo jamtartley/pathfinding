@@ -46,6 +46,24 @@ const nodeStateStyles = {
     }
 };
 
+const failedState = {
+    [NodeState.OPEN]: {
+        fill: "#6C3A51"
+    },
+    [NodeState.CLOSED]: {
+        fill: "#82556A"
+    }
+}
+
+const successState = {
+    [NodeState.OPEN]: {
+        fill: "#3a6c56"
+    },
+    [NodeState.CLOSED]: {
+        fill: "#55826F"
+    }
+}
+
 export default class Renderer {
     constructor(grid, size) {
         this.grid = grid;
@@ -93,6 +111,15 @@ export default class Renderer {
         let style = nodeStateStyles[state];
 
         rect.attr(style);
+    }
+
+    onFinish(isSolved) {
+        for (let node of this.grid.nodes) {
+            if (node.type === NodeType.EMPTY) {
+                let rect = this.nodeRectMap.get(node);
+                rect.attr(isSolved ? successState[node.state] : failedState[node.state]);
+            }
+        }
     }
 
     reset() {

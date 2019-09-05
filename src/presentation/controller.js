@@ -149,6 +149,8 @@ export default class Controller {
                 this.renderer.showState(r.node, r.state);
                 if (path && i === this.replayStack.length - 1) {
                     this.renderer.drawPath(path);
+                    this.renderer.onFinish(this.replayStack[i].node === this.grid.end);
+
                     this.action = Action.NONE;
                     controlPanel.fadeIn(panelAnim);
                 }
