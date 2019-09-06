@@ -3,7 +3,7 @@ import { find } from "./a_star.js";
 import store from "../redux/store.js";
 
 import Grid from "../logic/grid.js";
-import { SearchType } from "../presentation/controller.js";
+import { SearchType } from "../logic/search.js";
 import { NodeType } from "../logic/node.js";
 
 describe("A* algorithm", () => {
@@ -16,7 +16,6 @@ describe("A* algorithm", () => {
     });
 
     beforeEach(() => {
-        grid.resetSearchDecorations();
     });
 
     test("finds path with no walls", () => {

@@ -1,5 +1,5 @@
 export const NodeType = Object.freeze({
-    EMPTY: "empty",
+    NORMAL: "normal",
     START: "start",
     END: "end"
 });
@@ -21,8 +21,9 @@ export default class Node {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.type = NodeType.EMPTY;
+        this.type = NodeType.NORMAL;
         this.state = NodeState.NONE;
+        this.parent = null;
         this.walls = {
             [WallDir.NORTH]: true,
             [WallDir.EAST]: true,

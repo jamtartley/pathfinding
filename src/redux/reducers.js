@@ -1,5 +1,5 @@
 import { HeuristicType } from "../logic/heuristics.js";
-import { SearchType } from "../presentation/controller.js";
+import { SearchType } from "../logic/search.js";
 
 import * as Actions from "./actions.js";
 

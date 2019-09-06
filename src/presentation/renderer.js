@@ -3,7 +3,6 @@ import Raphael from "../lib/raphael.js";
 import Grid from "../logic/grid.js";
 import { NodeState, NodeType, WallDir } from "../logic/node.js";
 
-const strokeColour = "#244153";
 const solvedLine = {
     stroke: "#ABB8C0",
     "stroke-width": 5,
@@ -11,9 +10,10 @@ const solvedLine = {
 };
 
 const nodeTypeStyles = {
-    [NodeType.EMPTY]: {
+    [NodeType.NORMAL]: {
         fill: "#153042",
-        stroke: false
+        stroke: false,
+        "stroke-width": 2
     },
     [NodeType.START]: {
         fill: "#A95B56",
@@ -26,7 +26,7 @@ const nodeTypeStyles = {
 };
 
 const nodeStateStyles = {
-    [NodeState.NONE]: nodeTypeStyles[NodeType.EMPTY],
+    [NodeState.NONE]: nodeTypeStyles[NodeType.NORMAL],
     [NodeState.OPEN]: {
         fill: "#3A596C",
         stroke: false
@@ -56,8 +56,8 @@ const successState = {
 }
 
 const wallStroke = {
-    stroke: strokeColour,
-    "stroke-width": 4
+    stroke: "#244153",
+    "stroke-width": 2
 }
 
 export default class Renderer {
@@ -71,6 +71,15 @@ export default class Renderer {
 
         this.paper.setSize(this.grid.width * this.size, this.grid.height * this.size);
 
+        this.controlPanels = [
+            $("#solver-panel"),
+            $("#generator-panel")
+        ];
+
+        this.drawMaze();
+    }
+
+    drawMaze() {
         for (let node of this.grid.nodes) {
             let x1 = node.x * this.size;
             let y1 = node.y * this.size;
@@ -98,6 +107,7 @@ export default class Renderer {
 
             let rect = this.paper.rect(node.x * this.size, node.y * this.size, this.size, this.size);
             this.nodeRectMap.set(node, rect); // Keep a map so we don't overwrite rects later when changing type
+
             this.changeType(node);
         }
     }
@@ -107,7 +117,7 @@ export default class Renderer {
         let style = nodeTypeStyles[node.type];
 
         switch (node.type) {
-            case NodeType.EMPTY:
+            case NodeType.NORMAL:
                 rect.attr(style);
                 break;
             case NodeType.START:
@@ -120,7 +130,7 @@ export default class Renderer {
     }
 
     showState(node, state) {
-        if (node.type !== NodeType.EMPTY) return;
+        if (node.type !== NodeType.NORMAL) return;
 
         let rect = this.nodeRectMap.get(node);
         let style = nodeStateStyles[state];
@@ -128,9 +138,46 @@ export default class Renderer {
         rect.attr(style);
     }
 
+    fadeInPanels() {
+        const fadeInTime = 150;
+
+        for (let panel of this.controlPanels) {
+            panel.fadeIn(fadeInTime);
+        }
+    }
+
+    fadeOutPanels() {
+        const fadeOutTime = 150;
+
+        for (let panel of this.controlPanels) {
+            panel.fadeOut(fadeOutTime);
+        }
+    }
+
+    showReplay(path, replayEventStack, onFinishCb) {
+        const replayHz = 300;
+
+        this.fadeOutPanels();
+
+        for (let i = 0; i < replayEventStack.length; i++) {
+            let r = replayEventStack[i];
+
+            setTimeout(() => {
+                this.showState(r.node, r.state);
+                if (i === replayEventStack.length - 1) {
+                    this.drawPath(path);
+                    this.onFinish(replayEventStack[i].node === this.grid.end);
+
+                    onFinishCb();
+                    this.fadeInPanels();
+                }
+            }, i * (1000 / replayHz));
+        }
+    }
+
     onFinish(isSolved) {
         for (let node of this.grid.nodes) {
-            if (node.type === NodeType.EMPTY) {
+            if (node.type === NodeType.NORMAL) {
                 let rect = this.nodeRectMap.get(node);
                 rect.attr(isSolved ? successState[node.state] : failedState[node.state]);
             }
@@ -146,11 +193,15 @@ export default class Renderer {
     }
 
     clearPath() {
-        if (this.path) this.path.remove();
+        if (this.path) {
+            this.path.remove();
+        }
     }
 
     drawPath(path) {
-        if (!path || path.length === 0) return;
+        if (!path || path.length === 0) {
+            return;
+        }
 
         let svg = this.createSvgFromPath(path);
         this.path = this.paper.path(svg).attr(solvedLine).animate({opacity: 1}, 250);

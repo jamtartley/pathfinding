@@ -1,5 +1,6 @@
 import Node, { NodeState, NodeType, WallDir } from "./node.js";
 import { recursiveBacktrack } from "./maze_gen.js";
+import * as Utils from "./utils.js";
 
 export default class Grid {
     constructor(width, height) {
@@ -13,6 +14,8 @@ export default class Grid {
                 this.nodes.push(node);
             }
         }
+
+        this.randomiseTerminals();
     }
 
     getNodeAt(x, y) {
@@ -20,15 +23,34 @@ export default class Grid {
         return this.nodes[y * this.width + x];
     }
 
-    getNodesByType(type) {
-        return this.nodes.filter(n => n.type == type);
+    setStart(node) {
+        if (this.start) this.start.setType(NodeType.NORMAL);
+        this.start = node;
+        node.setType(NodeType.START);
     }
 
-    isInGrid(x, y) {
-        return x >= 0 && x < this.width && y >= 0 && y < this.height;
+    setEnd(node) {
+        if (this.end) this.end.setType(NodeType.NORMAL);
+        this.end = node;
+        node.setType(NodeType.END);
     }
 
-    resetSearchDecorations() {
+    randomiseTerminals() {
+        let randX = () => { return Utils.getRandInt(0, this.width - 1); };
+        let randY = () => { return Utils.getRandInt(0, this.height - 1); };
+
+        let start = this.getNodeAt(randX(), randY());
+        let end = this.getNodeAt(randX(), randY());
+
+        while (start === end) {
+            end = this.getNodeAt(randX(), randY());
+        }
+
+        this.setStart(start);
+        this.setEnd(end);
+    }
+
+    resetNodes() {
         for (let node of this.nodes) {
             node.setState(NodeState.NONE);
             node.f = node.g = node.h = 0;

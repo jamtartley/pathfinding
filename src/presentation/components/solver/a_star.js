@@ -1,7 +1,7 @@
 import React from "react";
 
 import Heuristics from "./heuristics.js";
-import { SearchType } from "../../controller.js";
+import { SearchType } from "../../../logic/search.js";
 
 import Toggle from "./toggle.js";
 

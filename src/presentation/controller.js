@@ -1,15 +1,12 @@
 import Renderer from "./renderer.js";
 
 import Grid from "../logic/grid.js";
-import * as Heuristics from "../logic/heuristics.js";
 import { NodeType } from "../logic/node.js";
+import { SearchFunctionMap } from "../logic/search.js";
+import * as Heuristics from "../logic/heuristics.js";
 import * as Utils from "../logic/utils.js";
 
 import { recursiveBacktrack } from "../logic/maze_gen.js";
-
-import { find as AStarFind } from "../algorithms/a_star.js";
-import { find as DijkstraFind } from "../algorithms/dijkstra.js";
-import { find as BestFirstFind } from "../algorithms/best_first.js";
 
 import store from "../redux/store.js";
 
@@ -20,25 +17,12 @@ const Action = Object.freeze({
     SEARCHING: "searching"
 });
 
-export const SearchType = Object.freeze({
-    ASTAR: "astar",
-    DIJKSTRA: "dijkstra",
-    BEST_FIRST: "best-first"
-});
-
-const searchFunctionMap = {
-    [SearchType.ASTAR]: AStarFind,
-    [SearchType.DIJKSTRA]: DijkstraFind,
-    [SearchType.BEST_FIRST]: BestFirstFind,
-};
-
 export default class Controller {
     constructor(grid) {
         this.size = 50;
         this.action = Action.NONE;
 
         this.grid = grid;
-        this.randomiseStartAndEnd();
 
         recursiveBacktrack(this.grid);
 
@@ -56,20 +40,6 @@ export default class Controller {
         }
     }
 
-    setStart(node) {
-        if (this.grid.start) this.grid.start.setType(NodeType.EMPTY);
-        this.grid.start = node;
-
-        node.setType(NodeType.START);
-    }
-
-    setEnd(node) {
-        if (this.grid.end) this.grid.end.setType(NodeType.EMPTY);
-        this.grid.end = node;
-
-        node.setType(NodeType.END);
-    }
-
     getNodeAtPagePos(pageX, pageY) {
         let x = Math.floor(pageX / this.size);
         let y = Math.floor(pageY / this.size);
@@ -80,72 +50,37 @@ export default class Controller {
         this.replayStack.push({node:node, state:node.state});
     }
 
-    getRandX() {
-        return Utils.getRandInt(0, this.grid.width - 1);
-    }
-
-    getRandY() {
-        return Utils.getRandInt(0, this.grid.height - 1);
-    }
-
     randomiseStartAndEnd() {
         if (this.action === Action.SEARCHING) return;
 
-        this.grid.resetSearchDecorations();
-        if (this.renderer) this.renderer.reset();
-
-        let start = this.grid.getNodeAt(this.getRandX(), this.getRandY());
-        let end = this.grid.getNodeAt(this.getRandX(), this.getRandY());
-
-        while (start === end) {
-            end = this.grid.getNodeAt(this.getRandX(), this.getRandY());
-        }
-
-        this.setStart(start);
-        this.setEnd(end);
+        this.grid.resetNodes();
+        this.grid.randomiseTerminals();
+        this.renderer.reset();
     }
 
     search(event) {
         if (this.action === Action.SEARCHING) return;
 
-        const panelAnim = 150;
-        const controlPanel = $("#control-panel");
-
-        controlPanel.fadeOut(panelAnim);
-
-        const replayHz = 300;
+        this.grid.resetNodes();
+        this.renderer.reset();
 
         this.action = Action.SEARCHING;
-        this.grid.resetSearchDecorations();
-        this.renderer.reset();
         this.replayStack = [];
 
         let state = store.getState();
         let type = state.type;
-        let path = searchFunctionMap[type](this.grid, state[type]);
+        let path = SearchFunctionMap[type](this.grid, state[type]);
 
-        for (let i = 0; i < this.replayStack.length; i++) {
-            let r = this.replayStack[i];
-            setTimeout(() => {
-                this.renderer.showState(r.node, r.state);
-                if (path && i === this.replayStack.length - 1) {
-                    this.renderer.drawPath(path);
-                    this.renderer.onFinish(this.replayStack[i].node === this.grid.end);
-
-                    this.action = Action.NONE;
-                    controlPanel.fadeIn(panelAnim);
-                }
-            }, i * (1000 / replayHz));
-        }
+        this.renderer.showReplay(path, this.replayStack, () => { this.action = Action.NONE; });
     }
 
     actOnNode(node) {
         switch (this.action) {
             case Action.DRAGGING_START:
-                if (node.type === NodeType.EMPTY) this.setStart(node);
+                if (node.type === NodeType.NORMAL) this.grid.setStart(node);
                 break;
             case Action.DRAGGING_END:
-                if (node.type === NodeType.EMPTY) this.setEnd(node);
+                if (node.type === NodeType.NORMAL) this.grid.setEnd(node);
                 break;
             case Action.SEARCHING:
                 return;
@@ -168,7 +103,7 @@ export default class Controller {
                     break;
             }
 
-            this.grid.resetSearchDecorations();
+            this.grid.resetNodes();
             this.renderer.reset();
             this.actOnNode(selectedNode);
         }
