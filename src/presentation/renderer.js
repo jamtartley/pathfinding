@@ -1,7 +1,7 @@
 import Raphael from "../lib/raphael.js";
 
 import Grid from "../logic/grid.js";
-import { NodeState, NodeType } from "../logic/node.js";
+import { NodeState, NodeType, WallDir } from "../logic/node.js";
 
 const strokeColour = "#244153";
 const solvedLine = {
@@ -18,19 +18,19 @@ const blockEffect = {
 const nodeTypeStyles = {
     [NodeType.EMPTY]: {
         fill: "#153042",
-        stroke: strokeColour
+        stroke: false
     },
     [NodeType.BLOCK]: {
         fill: "#081F2D",
-        stroke: strokeColour
+        stroke: false
     },
     [NodeType.START]: {
         fill: "#43834B",
-        stroke: strokeColour
+        stroke: false
     },
     [NodeType.END]: {
         fill: "#A95B56",
-        stroke: strokeColour
+        stroke: false
     }
 };
 
@@ -38,11 +38,11 @@ const nodeStateStyles = {
     [NodeState.NONE]: nodeTypeStyles[NodeType.EMPTY],
     [NodeState.OPEN]: {
         fill: "#3A596C",
-        stroke: strokeColour
+        stroke: false
     },
     [NodeState.CLOSED]: {
         fill: "#557182",
-        stroke: strokeColour
+        stroke: false
     }
 };
 
@@ -64,6 +64,11 @@ const successState = {
     }
 }
 
+const wallStroke = {
+    stroke: strokeColour,
+    "stroke-width": 4
+}
+
 export default class Renderer {
     constructor(grid, size) {
         this.grid = grid;
@@ -76,6 +81,30 @@ export default class Renderer {
         this.paper.setSize(this.grid.width * this.size, this.grid.height * this.size);
 
         for (let node of this.grid.nodes) {
+            let x1 = node.x * this.size;
+            let y1 = node.y * this.size;
+            let x2 = x1 + this.size;
+            let y2 = y1;
+            let x3 = x2;
+            let y3 = y1 + this.size;
+            let x4 = x1;
+            let y4 = y3;
+
+            let path = `M${x1},${y1}L${x2},${y2}L${x3},${y3}L${x4},${y4}Z`;
+
+            if (node.walls[WallDir.NORTH]) {
+                this.paper.path(`M${x1},${y1}L${x2},${y2}`).attr(wallStroke);
+            }
+            if (node.walls[WallDir.EAST]) {
+                this.paper.path(`M${x2},${y2}L${x3},${y3}`).attr(wallStroke);
+            }
+            if (node.walls[WallDir.SOUTH]) {
+                this.paper.path(`M${x3},${y3}L${x4},${y4}`).attr(wallStroke);
+            }
+            if (node.walls[WallDir.WEST]) {
+                this.paper.path(`M${x4},${y4}L${x1},${y1}`).attr(wallStroke);
+            }
+
             let rect = this.paper.rect(node.x * this.size, node.y * this.size, this.size, this.size);
             this.nodeRectMap.set(node, rect); // Keep a map so we don't overwrite rects later when changing type
             this.changeType(node);

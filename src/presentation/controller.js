@@ -41,6 +41,7 @@ export default class Controller {
         this.renderer = new Renderer(grid, this.size);
         this.replayStack = [];
 
+        return;
         for (let node of this.grid.nodes) {
             node.onTypeChange = this.renderer.changeType.bind(this.renderer);
             node.onStateChange = this.onStateChange.bind(this);
