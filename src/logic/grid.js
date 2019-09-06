@@ -13,9 +13,6 @@ export default class Grid {
                 this.nodes.push(node);
             }
         }
-
-        this.start = this.getNodeAt(0, 0);
-        recursiveBacktrack(this);
     }
 
     getNodeAt(x, y) {
@@ -23,18 +20,8 @@ export default class Grid {
         return this.nodes[y * this.width + x];
     }
 
-    clearAllBlocks() {
-        for (let node of this.nodes) {
-            if (node.type === NodeType.BLOCK) node.setType(NodeType.EMPTY);
-        }
-    }
-
     getNodesByType(type) {
         return this.nodes.filter(n => n.type == type);
-    }
-
-    canWalkAt(x, y) {
-        return this.isInGrid(x, y) && this.getNodeAt(x, y).type !== NodeType.BLOCK;
     }
 
     isInGrid(x, y) {
@@ -57,7 +44,7 @@ export default class Grid {
         ].filter(n => n);
     }
 
-    getWalkableNeighbours(origin, shouldIncludeDiag) {
+    getWalkableNeighbours(origin) {
         return [
             origin.walls[WallDir.NORTH] ? null : this.getNodeAt(origin.x, origin.y - 1),
             origin.walls[WallDir.EAST] ? null : this.getNodeAt(origin.x + 1, origin.y),

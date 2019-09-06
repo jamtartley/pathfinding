@@ -5,6 +5,8 @@ import * as Heuristics from "../logic/heuristics.js";
 import { NodeType } from "../logic/node.js";
 import * as Utils from "../logic/utils.js";
 
+import { recursiveBacktrack } from "../logic/maze_gen.js";
+
 import { find as AStarFind } from "../algorithms/a_star.js";
 import { find as DijkstraFind } from "../algorithms/dijkstra.js";
 import { find as BestFirstFind } from "../algorithms/best_first.js";
@@ -15,8 +17,6 @@ const Action = Object.freeze({
     NONE: "none",
     DRAGGING_START: "dragging-start",
     DRAGGING_END: "dragging-end",
-    PAINTING_BLOCKS: "painting-blocks",
-    CLEARING_BLOCKS: "clearing-blocks",
     SEARCHING: "searching"
 });
 
@@ -38,21 +38,22 @@ export default class Controller {
         this.action = Action.NONE;
 
         this.grid = grid;
-        this.renderer = new Renderer(grid, this.size);
-        this.replayStack = [];
+        this.randomiseStartAndEnd();
 
-        //return;
-        for (let node of this.grid.nodes) {
-            node.onTypeChange = this.renderer.changeType.bind(this.renderer);
-            node.onStateChange = this.onStateChange.bind(this);
-        }
+        recursiveBacktrack(this.grid);
 
         let gridArea = $("#grid-area");
         gridArea.mousedown($.proxy(this.mousedown, this));
         gridArea.mouseup($.proxy(this.mouseup, this));
         gridArea.mousemove($.proxy(this.mousemove, this));
 
-        this.randomiseStartAndEnd();
+        this.renderer = new Renderer(grid, this.size);
+        this.replayStack = [];
+
+        for (let node of this.grid.nodes) {
+            node.onTypeChange = this.renderer.changeType.bind(this.renderer);
+            node.onStateChange = this.onStateChange.bind(this);
+        }
     }
 
     setStart(node) {
@@ -79,26 +80,6 @@ export default class Controller {
         this.replayStack.push({node:node, state:node.state});
     }
 
-    removeBlocks() {
-        this.grid.resetSearchDecorations();
-        this.renderer.reset();
-        this.grid.clearAllBlocks();
-    }
-
-    placeRandomBlocks() {
-        this.grid.resetSearchDecorations();
-        this.renderer.reset();
-        this.removeBlocks();
-
-        const maxCoverage = 0.75;
-        const endIdx = Utils.getRandInt(0, maxCoverage * this.grid.nodes.length);
-
-        for (let i = 0; i < endIdx; i++) {
-            let node = this.grid.getNodeAt(this.getRandX(), this.getRandY());
-            if (node.type === NodeType.EMPTY) node.setType(NodeType.BLOCK);
-        }
-    }
-
     getRandX() {
         return Utils.getRandInt(0, this.grid.width - 1);
     }
@@ -109,7 +90,7 @@ export default class Controller {
 
     randomiseStartAndEnd() {
         this.grid.resetSearchDecorations();
-        this.renderer.reset();
+        if (this.renderer) this.renderer.reset();
 
         let start = this.grid.getNodeAt(this.getRandX(), this.getRandY());
         let end = this.grid.getNodeAt(this.getRandX(), this.getRandY());
@@ -164,12 +145,6 @@ export default class Controller {
             case Action.DRAGGING_END:
                 if (node.type === NodeType.EMPTY) this.setEnd(node);
                 break;
-            case Action.PAINTING_BLOCKS:
-                if (node.type === NodeType.EMPTY) node.setType(NodeType.BLOCK);
-                break;
-            case Action.CLEARING_BLOCKS:
-                if (node.type === NodeType.BLOCK) node.setType(NodeType.EMPTY);
-                break;
             case Action.SEARCHING:
                 return;
         }
@@ -188,12 +163,6 @@ export default class Controller {
                     break;
                 case NodeType.END:
                     this.action = Action.DRAGGING_END;
-                    break;
-                case NodeType.EMPTY:
-                    this.action = Action.PAINTING_BLOCKS;
-                    break;
-                case NodeType.BLOCK:
-                    this.action = Action.CLEARING_BLOCKS;
                     break;
             }
 

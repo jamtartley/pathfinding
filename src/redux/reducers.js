@@ -9,18 +9,15 @@ const initialState = {
         heuristic: {
             type: HeuristicType.MANHATTAN,
             weight: 1
-        },
-        canMoveDiag: true
+        }
     },
     [SearchType.BEST_FIRST]: {
         heuristic: {
             type: HeuristicType.MANHATTAN,
             weight: 1
-        },
-        canMoveDiag: true
+        }
     },
     [SearchType.DIJKSTRA]: {
-        canMoveDiag: true
     },
 };
 
@@ -39,13 +36,6 @@ function reducer(state = initialState, action) {
                         ...state[state.type].heuristic,
                         type: action.payload
                     }
-                }
-            });
-        case Actions.CHANGE_ALLOW_DIAG:
-            return Object.assign({}, state, {
-                [state.type]: {
-                    ...state[state.type],
-                    canMoveDiag: action.payload
                 }
             });
         default:

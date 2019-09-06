@@ -6,7 +6,6 @@ import * as Heuristics from "../logic/heuristics.js";
 export function find(grid, options) {
     // @BUG(HIGH) Crash after moving blocks and start/end positions
     // Only seems to happen sometimes, the open list doesn't seem to empty
-    let canMoveDiag = options.canMoveDiag;
     let heuristic = Heuristics.HeuristicFunctionMap[options.heuristic.type || Heuristics.HeuristicType.MANHATTAN];
 
     let open = new Heap(function(a, b) {
@@ -22,7 +21,7 @@ export function find(grid, options) {
 
         if (origin === grid.end) return getPath(grid);
 
-        let neighbours = grid.getWalkableNeighbours(origin, canMoveDiag);
+        let neighbours = grid.getWalkableNeighbours(origin);
 
         for (let n of neighbours) {
             if (n.state === NodeState.CLOSED) continue;
