@@ -32,6 +32,7 @@ export default class Grid {
         for (let node of this.nodes) {
             node.setState(NodeState.NONE);
             node.f = node.g = node.h = 0;
+            node.parent = null;
         }
     }
 

@@ -89,6 +89,8 @@ export default class Controller {
     }
 
     randomiseStartAndEnd() {
+        if (this.action === Action.SEARCHING) return;
+
         this.grid.resetSearchDecorations();
         if (this.renderer) this.renderer.reset();
 
