@@ -7,15 +7,21 @@ import Controller from "./presentation/controller.js";
 import React from "react";
 import ReactDOM from "react-dom";
 
-import ControlPanel from "./presentation/components/control_panel.js";
+import GeneratorPanel from "./presentation/components/generator/generator_panel.js";
+import SolverPanel from "./presentation/components/solver/solver_panel.js";
 
 window.addEventListener("DOMContentLoaded", (event) => {
     let grid = new Grid(30, 20);
     let controller = new Controller(grid);
 
-    $("#control-panel").draggable({
+    $("#solver-panel").draggable({
         addClasses: true
     });
 
-    ReactDOM.render(<ControlPanel controller={controller}/>, document.getElementById("control-panel"));
+    $("#generator-panel").draggable({
+        addClasses: true
+    });
+
+    ReactDOM.render(<SolverPanel controller={controller}/>, document.getElementById("solver-panel"));
+    ReactDOM.render(<GeneratorPanel controller={controller}/>, document.getElementById("generator-panel"));
 });

@@ -1,14 +1,14 @@
 import React from "react";
 import AStar from "./a_star.js";
 
-import { SearchType } from "../controller.js";
+import { SearchType } from "../../controller.js";
 
-import store from "../../redux/store.js";
-import { changeSearchType } from "../../redux/actions.js";
+import store from "../../../redux/store.js";
+import { changeSearchType } from "../../../redux/actions.js";
 
-export default class SearchPanel extends React.Component {
+export default class AlgorithmSection extends React.Component {
     componentDidMount() {
-        $("#search-panel").accordion({
+        $("#algorithm-section").accordion({
             animate: 200,
             active: 0,
             activate: function (event, ui) {
@@ -21,7 +21,7 @@ export default class SearchPanel extends React.Component {
         let options = store.getState();
 
         return (
-            <div id="search-panel">
+            <div id="algorithm-section">
                 <AStar type={SearchType.ASTAR} startOpts={options[SearchType.ASTAR]}/>
             </div>
         );

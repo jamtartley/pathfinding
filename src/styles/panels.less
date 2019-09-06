@@ -1,13 +1,13 @@
 @import "./colours";
 
-@inset: 30px;
+@solver-inset: 30px;
+@generator-inset: 400px;
 
-#control-panel {
+.panel {
     display: flex;
     flex-direction: column;
     position: absolute;
-    top: @inset;
-    left: @inset;
+    top: 30px;
     min-width: 300px;
     background: rgba(58, 89, 108, 0.8);
     box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.4);
@@ -23,7 +23,17 @@
     }
 }
 
-#panel-header {
+#solver-panel {
+    .panel;
+    left: calc(100vh - @solver-inset);
+}
+
+#generator-panel {
+    .panel;
+    left: calc(100vh - @generator-inset);
+}
+
+#header-section {
     color: @text;
     font-size: 1.75em;
     padding: 50px 20px;
@@ -37,10 +47,10 @@
     }
 }
 
-#search-panel {
+#algorithm-section {
 }
 
-#action-panel {
+#action-section {
     display: flex;
     flex-direction: column;
     padding: 10px;

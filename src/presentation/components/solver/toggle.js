@@ -1,7 +1,5 @@
 import React from "react";
 
-import store from "../../redux/store.js";
-
 export default class Toggle extends React.Component {
     onChange(e) {
     }
