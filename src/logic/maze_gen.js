@@ -7,7 +7,7 @@ export function recursiveBacktrack(grid) {
     let stack = [];
 
     while (grid.nodes.some(n => !n.isVisited)) {
-        let neighbours = grid.getWalkableNeighbours(curr, false);
+        let neighbours = grid.getAllNeighbours(curr, false);
         let unvisited = neighbours.filter(n => !n.isVisited);
 
         if (unvisited.length === 0) {

@@ -1,4 +1,4 @@
-import Node, { NodeState, NodeType } from "./node.js";
+import Node, { NodeState, NodeType, WallDir } from "./node.js";
 import { recursiveBacktrack } from "./maze_gen.js";
 
 export default class Grid {
@@ -48,14 +48,21 @@ export default class Grid {
         }
     }
 
-    getWalkableNeighbours(origin, shouldIncludeDiag) {
-        let neighbours = [
+    getAllNeighbours(origin) {
+        return [
             this.getNodeAt(origin.x, origin.y - 1),
             this.getNodeAt(origin.x + 1, origin.y),
             this.getNodeAt(origin.x, origin.y + 1),
             this.getNodeAt(origin.x - 1, origin.y),
-        ];
+        ].filter(n => n);
+    }
 
-        return neighbours.filter(n => n && n.type !== NodeType.BLOCK);
+    getWalkableNeighbours(origin, shouldIncludeDiag) {
+        return [
+            origin.walls[WallDir.NORTH] ? null : this.getNodeAt(origin.x, origin.y - 1),
+            origin.walls[WallDir.EAST] ? null : this.getNodeAt(origin.x + 1, origin.y),
+            origin.walls[WallDir.SOUTH] ? null : this.getNodeAt(origin.x, origin.y + 1),
+            origin.walls[WallDir.WEST] ? null : this.getNodeAt(origin.x - 1, origin.y),
+        ].filter(n => n);
     }
 };

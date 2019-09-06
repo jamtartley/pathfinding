@@ -41,7 +41,7 @@ export default class Controller {
         this.renderer = new Renderer(grid, this.size);
         this.replayStack = [];
 
-        return;
+        //return;
         for (let node of this.grid.nodes) {
             node.onTypeChange = this.renderer.changeType.bind(this.renderer);
             node.onStateChange = this.onStateChange.bind(this);
@@ -130,7 +130,7 @@ export default class Controller {
 
         controlPanel.fadeOut(panelAnim);
 
-        const replayHz = 200;
+        const replayHz = 300;
 
         this.action = Action.SEARCHING;
         this.grid.resetSearchDecorations();
