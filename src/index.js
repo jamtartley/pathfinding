@@ -11,7 +11,7 @@ import GeneratorPanel from "./presentation/components/generator/generator_panel.
 import SolverPanel from "./presentation/components/solver/solver_panel.js";
 
 window.addEventListener("DOMContentLoaded", (event) => {
-    let grid = new Grid(30, 20);
+    let grid = new Grid(35, 35);
     let controller = new Controller(grid);
 
     $("#solver-panel").draggable({
@@ -23,5 +23,4 @@ window.addEventListener("DOMContentLoaded", (event) => {
     });
 
     ReactDOM.render(<SolverPanel controller={controller}/>, document.getElementById("solver-panel"));
-    ReactDOM.render(<GeneratorPanel controller={controller}/>, document.getElementById("generator-panel"));
 });

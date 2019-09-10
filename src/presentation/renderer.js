@@ -155,7 +155,7 @@ export default class Renderer {
     }
 
     showReplay(path, replayEventStack, onFinishCb) {
-        const replayHz = 300;
+        const replayHz = 500;
 
         this.fadeOutPanels();
 
