@@ -11,8 +11,8 @@ export default class ActionSection extends React.Component {
 
     render() {
         return (
-            <div id="action-section">
-                <button id="search" className="search-button" onClick={this.handleSearch.bind(this)}>Search</button>
+            <div className="action-section">
+                <button id="search" className="primary-action-button" onClick={this.handleSearch.bind(this)}>Search</button>
                 <button id="randomise-ends" onClick={this.handleRandomiseEnds.bind(this)}>Randomise end points</button>
             </div>
         )

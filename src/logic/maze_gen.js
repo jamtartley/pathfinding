@@ -1,14 +1,15 @@
 import Grid from "./grid.js";
+import { NodeState } from "./node.js";
 
 export function recursiveBacktrack(grid) {
     let curr = grid.start;
-    curr.isVisited = true;
+    curr.setState(NodeState.VISITED);
 
     let stack = [];
 
-    while (grid.nodes.some(n => !n.isVisited)) {
+    while (grid.nodes.some(n => n.state !== NodeState.VISITED)) {
         let neighbours = grid.getAllNeighbours(curr, false);
-        let unvisited = neighbours.filter(n => !n.isVisited);
+        let unvisited = neighbours.filter(n => n.state !== NodeState.VISITED);
 
         if (unvisited.length === 0) {
             curr = stack.pop();
@@ -19,7 +20,7 @@ export function recursiveBacktrack(grid) {
             curr.removeWallBetween(n);
 
             curr = n;
-            n.isVisited = true;
+            n.setState(NodeState.VISITED);
         }
     }
 }

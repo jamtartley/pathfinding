@@ -7,7 +7,8 @@ export const NodeType = Object.freeze({
 export const NodeState = Object.freeze({
     NONE: "none",
     OPEN: "open",
-    CLOSED: "closed"
+    CLOSED: "closed",
+    VISITED: "visited"
 });
 
 export const WallDir = Object.freeze({
@@ -40,6 +41,13 @@ export default class Node {
     setState(state) {
         this.state = state;
         if (this.onStateChange) this.onStateChange(this);
+    }
+
+    resetWalls() {
+        this.walls[WallDir.NORTH] = true;
+        this.walls[WallDir.EAST] = true;
+        this.walls[WallDir.SOUTH] = true;
+        this.walls[WallDir.WEST] = true;
     }
 
     removeWallBetween(other) {

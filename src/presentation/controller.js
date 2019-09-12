@@ -14,7 +14,7 @@ const Action = Object.freeze({
     NONE: "none",
     DRAGGING_START: "dragging-start",
     DRAGGING_END: "dragging-end",
-    SEARCHING: "searching"
+    REPLAYING: "replaying"
 });
 
 export default class Controller {
@@ -23,8 +23,6 @@ export default class Controller {
         this.action = Action.NONE;
 
         this.grid = grid;
-
-        recursiveBacktrack(this.grid);
 
         let gridArea = $("#grid-area");
         gridArea.mousedown($.proxy(this.mousedown, this));
@@ -36,7 +34,9 @@ export default class Controller {
 
         for (let node of this.grid.nodes) {
             node.onTypeChange = this.renderer.changeType.bind(this.renderer);
-            node.onStateChange = this.onStateChange.bind(this);
+            node.onStateChange = (node) => {
+                this.replayStack.push({node: node, state: node.state});
+            };
         }
     }
 
@@ -46,25 +46,38 @@ export default class Controller {
         return this.grid.getNodeAt(x, y);
     }
 
-    onStateChange(node) {
-        this.replayStack.push({node:node, state:node.state});
-    }
-
     randomiseStartAndEnd() {
-        if (this.action === Action.SEARCHING) return;
+        if (this.action === Action.REPLAYING) return;
 
         this.grid.resetNodes();
         this.grid.randomiseTerminals();
         this.renderer.reset();
     }
 
-    search(event) {
-        if (this.action === Action.SEARCHING) return;
+    generateMaze() {
+        if (this.action === Action.REPLAYING) return;
+
+        for (let node of this.grid.nodes) {
+            node.resetWalls();
+        }
 
         this.grid.resetNodes();
         this.renderer.reset();
 
-        this.action = Action.SEARCHING;
+        this.action = Action.REPLAYING;
+        this.replayStack = [];
+
+        recursiveBacktrack(this.grid);
+        this.renderer.showReplay(null, this.replayStack, () => { this.action = Action.NONE; });
+    }
+
+    search(event) {
+        if (this.action === Action.REPLAYING) return;
+
+        this.grid.resetNodes();
+        this.renderer.reset();
+
+        this.action = Action.REPLAYING;
         this.replayStack = [];
 
         let state = store.getState();
@@ -82,14 +95,14 @@ export default class Controller {
             case Action.DRAGGING_END:
                 if (node.type === NodeType.NORMAL) this.grid.setEnd(node);
                 break;
-            case Action.SEARCHING:
+            case Action.REPLAYING:
                 return;
         }
 
     }
 
     mousedown(event) {
-        if (this.action === Action.SEARCHING) return;
+        if (this.action === Action.REPLAYING) return;
 
         let selectedNode = this.getNodeAtPagePos(event.pageX, event.pageY);
 
