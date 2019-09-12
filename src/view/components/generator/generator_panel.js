@@ -1,13 +1,11 @@
 import React from "react";
-import ActionSection from "./action_section.js";
-import AlgorithmSection from "./algorithm_section.js";
-import HeaderSection from "../header_section.js";
+
+import HeaderSection from "view/components/header_section.js";
+
+import ActionSection from "view/components/generator/action_section.js";
+import AlgorithmSection from "view/components/generator/algorithm_section.js";
 
 export default class GeneratorPanel extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
             <React.Fragment>

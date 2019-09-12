@@ -1,5 +1,5 @@
-import Grid from "../logic/grid.js";
-import { NodeState } from "../logic/node.js";
+import Grid from "core/grid.js";
+import { NodeState } from "core/node.js";
 
 export function generate(grid) {
     let curr = grid.start;

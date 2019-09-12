@@ -1,7 +1,7 @@
-import Raphael from "../lib/raphael.js";
+import Raphael from "lib/raphael.js";
 
-import Grid from "../logic/grid.js";
-import { NodeState, NodeType, WallDir } from "../logic/node.js";
+import Grid from "core/grid.js";
+import { NodeState, NodeType, WallDir } from "core/node.js";
 
 const solvedLine = {
     stroke: "#ABB8C0",
@@ -159,7 +159,7 @@ export default class Renderer {
         }
     }
 
-    showReplay(path, replayEventStack, onFinishCb) {
+    showReplay(replayEventStack, onFinishCb) {
         const replayHz = 300;
 
         this.fadeOutPanels();
@@ -170,7 +170,6 @@ export default class Renderer {
             setTimeout(() => {
                 this.showState(r.node, r.state);
                 if (i === replayEventStack.length - 1) {
-                    this.drawPath(path);
                     this.onFinish(replayEventStack[i].node === this.grid.end);
 
                     onFinishCb();

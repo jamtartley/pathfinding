@@ -1,7 +1,7 @@
 let Heap = require("heap");
-import Grid from "../logic/grid.js";
-import Node, { NodeState } from "../logic/node.js";
-import * as Heuristics from "../logic/heuristics.js";
+import Grid from "core/grid.js";
+import Node, { NodeState } from "core/node.js";
+import * as Heuristics from "core/heuristics.js";
 
 export function find(grid, options) {
     // @BUG(HIGH) Crash after moving blocks and start/end positions

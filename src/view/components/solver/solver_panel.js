@@ -1,8 +1,11 @@
 import React from "react";
-import ActionSection from "./action_section.js";
-import HeaderSection from "../header_section.js";
-import SettingsSection from "./settings_section.js";
-import AlgorithmSection from "./algorithm_section.js";
+
+import HeaderSection from "view/components/header_section.js";
+
+
+import ActionSection from "view/components/solver/action_section.js";
+import SettingsSection from "view/components/solver/settings_section.js";
+import AlgorithmSection from "view/components/solver/algorithm_section.js";
 
 export default class SolverPanel extends React.Component {
     render() {

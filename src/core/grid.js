@@ -1,5 +1,5 @@
-import Node, { NodeState, NodeType, WallDir } from "./node.js";
-import * as Utils from "./utils.js";
+import Node, { NodeState, NodeType, WallDir } from "core/node.js";
+import * as Utils from "core/utils.js";
 
 export default class Grid {
     constructor(width, height) {

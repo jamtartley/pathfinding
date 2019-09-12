@@ -1,10 +1,11 @@
-import { find } from "./a_star.js";
+import { find } from "solver/a_star.js";
 
-import store from "../redux/store.js";
+import store from "redux/store.js";
 
-import Grid from "../logic/grid.js";
-import { SearchType } from "../solvers/solvers.js";
-import { NodeType } from "../logic/node.js";
+import Grid from "core/grid.js";
+import { NodeType } from "core/node.js";
+
+import { SearchType } from "solver/solvers.js";
 
 describe("A* algorithm", () => {
     let grid;

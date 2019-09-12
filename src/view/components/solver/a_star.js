@@ -1,9 +1,7 @@
 import React from "react";
 
-import Heuristics from "./heuristics.js";
-import { SearchType } from "../../../solvers/solvers.js";
-
-import Toggle from "./toggle.js";
+import Heuristics from "view/components/solver/heuristics.js";
+import { SearchType } from "solver/solvers.js";
 
 export default class AStar extends React.Component {
     render() {

@@ -1,8 +1,8 @@
-import { HeuristicType } from "../logic/heuristics.js";
-import { SearchType } from "../solvers/solvers.js";
-import { GeneratorType } from "../generators/generators.js";
+import { HeuristicType } from "core/heuristics.js";
+import { SearchType } from "solver/solvers.js";
+import { GeneratorType } from "generator/generators.js";
 
-import * as Actions from "./actions.js";
+import * as Actions from "redux/actions.js";
 
 const initialState = {
     search_type: SearchType.ASTAR,

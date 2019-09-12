@@ -1,4 +1,4 @@
-import { generate as RecursiveBacktracker } from "./recursive_backtracker.js";
+import { generate as RecursiveBacktracker } from "generator/recursive_backtracker.js";
 
 export const GeneratorType = Object.freeze({
     RECURSIVE_BACKTRACKER: "recursive-backtracker"

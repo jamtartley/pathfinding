@@ -1,10 +1,11 @@
 import React from "react";
-import AStar from "./a_star.js";
 
-import { SearchType } from "../../../solvers/solvers.js";
+import { SearchType } from "solver/solvers.js";
 
-import store from "../../../redux/store.js";
-import { changeSearchType } from "../../../redux/actions.js";
+import AStar from "view/components/solver/a_star.js";
+
+import store from "redux/store.js";
+import { changeSearchType } from "redux/actions.js";
 
 export default class AlgorithmSection extends React.Component {
     componentDidMount() {

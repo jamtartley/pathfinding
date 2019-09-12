@@ -1,10 +1,11 @@
 import React from "react";
-import RecursiveBacktracker from "./recursive_backtracker.js";
 
-import { GeneratorType } from "../../../generators/generators.js";
+import { GeneratorType } from "generator/generators.js";
 
-import store from "../../../redux/store.js";
-import { changeSearchType } from "../../../redux/actions.js";
+import RecursiveBacktracker from "view/components/generator/recursive_backtracker.js";
+
+import store from "redux/store.js";
+import { changeSearchType } from "redux/actions.js";
 
 export default class AlgorithmSection extends React.Component {
     componentDidMount() {
@@ -12,13 +13,13 @@ export default class AlgorithmSection extends React.Component {
             animate: 200,
             active: 0,
             activate: function (event, ui) {
-                store.dispatch(changeSearchType(ui.newHeader.data("generator")));
+                store.dispatch(changeGeneratorType(ui.newHeader.data("generator")));
             }.bind(this)
         });
     }
 
     render() {
-        let options = store.getState();
+        let options = store.getState().generators;
 
         return (
             <div className="algorithm-section">
@@ -27,4 +28,3 @@ export default class AlgorithmSection extends React.Component {
         );
     }
 };
-

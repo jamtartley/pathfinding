@@ -1,5 +1,5 @@
-import Grid from "./grid.js";
-import { NodeType } from "./node.js";
+import Grid from "core/grid.js";
+import { NodeType } from "core/node.js";
 
 describe("Grid", () => {
     let grid;

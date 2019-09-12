@@ -1,13 +1,13 @@
-import Renderer from "./renderer.js";
+import Renderer from "view/renderer.js";
 
-import Grid from "../logic/grid.js";
-import { NodeType } from "../logic/node.js";
-import { SearchFunctionMap } from "../solvers/solvers.js";
-import { GeneratorFunctionMap } from "../generators/generators.js";
-import * as Heuristics from "../logic/heuristics.js";
-import * as Utils from "../logic/utils.js";
+import Grid from "core/grid.js";
+import { NodeType } from "core/node.js";
+import { SearchFunctionMap } from "solver/solvers.js";
+import { GeneratorFunctionMap } from "generator/generators.js";
+import * as Heuristics from "core/heuristics.js";
+import * as Utils from "core/utils.js";
 
-import store from "../redux/store.js";
+import store from "redux/store.js";
 
 const Action = Object.freeze({
     NONE: "none",
@@ -70,7 +70,7 @@ export default class Controller {
         let type = state.generator_type;
         GeneratorFunctionMap[type](this.grid);
 
-        this.renderer.showReplay(null, this.replayStack, () => { this.action = Action.NONE; });
+        this.renderer.showReplay(this.replayStack, () => { this.action = Action.NONE; });
     }
 
     search(event) {
@@ -86,7 +86,10 @@ export default class Controller {
         let type = state.search_type;
         let path = SearchFunctionMap[type](this.grid, state.solvers[type]);
 
-        this.renderer.showReplay(path, this.replayStack, () => { this.action = Action.NONE; });
+        this.renderer.showReplay(this.replayStack, () => {
+            this.action = Action.NONE;
+            this.renderer.drawPath(path);
+        });
     }
 
     actOnNode(node) {
