@@ -1,4 +1,4 @@
-import { find as AStarFind } from "../algorithms/a_star.js";
+import { find as AStarFind } from "../solvers/a_star.js";
 
 export const SearchType = Object.freeze({
     ASTAR: "astar"

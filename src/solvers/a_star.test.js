@@ -3,7 +3,7 @@ import { find } from "./a_star.js";
 import store from "../redux/store.js";
 
 import Grid from "../logic/grid.js";
-import { SearchType } from "../logic/search.js";
+import { SearchType } from "../solvers/solvers.js";
 import { NodeType } from "../logic/node.js";
 
 describe("A* algorithm", () => {

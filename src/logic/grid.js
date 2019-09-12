@@ -1,5 +1,4 @@
 import Node, { NodeState, NodeType, WallDir } from "./node.js";
-import { recursiveBacktrack } from "./maze_gen.js";
 import * as Utils from "./utils.js";
 
 export default class Grid {

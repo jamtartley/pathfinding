@@ -2,11 +2,10 @@ import Renderer from "./renderer.js";
 
 import Grid from "../logic/grid.js";
 import { NodeType } from "../logic/node.js";
-import { SearchFunctionMap } from "../logic/search.js";
+import { SearchFunctionMap } from "../solvers/solvers.js";
+import { GeneratorFunctionMap } from "../generators/generators.js";
 import * as Heuristics from "../logic/heuristics.js";
 import * as Utils from "../logic/utils.js";
-
-import { recursiveBacktrack } from "../logic/maze_gen.js";
 
 import store from "../redux/store.js";
 
@@ -67,7 +66,10 @@ export default class Controller {
         this.action = Action.REPLAYING;
         this.replayStack = [];
 
-        recursiveBacktrack(this.grid);
+        let state = store.getState();
+        let type = state.generator_type;
+        GeneratorFunctionMap[type](this.grid);
+
         this.renderer.showReplay(null, this.replayStack, () => { this.action = Action.NONE; });
     }
 
@@ -81,8 +83,8 @@ export default class Controller {
         this.replayStack = [];
 
         let state = store.getState();
-        let type = state.type;
-        let path = SearchFunctionMap[type](this.grid, state[type]);
+        let type = state.search_type;
+        let path = SearchFunctionMap[type](this.grid, state.solvers[type]);
 
         this.renderer.showReplay(path, this.replayStack, () => { this.action = Action.NONE; });
     }

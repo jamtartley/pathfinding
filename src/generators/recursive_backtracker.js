@@ -1,7 +1,7 @@
-import Grid from "./grid.js";
-import { NodeState } from "./node.js";
+import Grid from "../logic/grid.js";
+import { NodeState } from "../logic/node.js";
 
-export function recursiveBacktrack(grid) {
+export function generate(grid) {
     let curr = grid.start;
     curr.setState(NodeState.VISITED);
 
