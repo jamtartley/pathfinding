@@ -13,11 +13,11 @@ export function find(grid, options) {
     });
 
     open.push(grid.start);
-    grid.start.setState(NodeState.OPEN);
+    grid.start.state = NodeState.OPEN;
 
     while (open.empty() === false) {
         let origin = open.pop();
-        origin.setState(NodeState.CLOSED);
+        origin.state = NodeState.CLOSED;
 
         if (origin === grid.end) return getPath(grid);
 
@@ -36,7 +36,7 @@ export function find(grid, options) {
 
                 if (n.state !== NodeState.OPEN) {
                     open.push(n);
-                    n.setState(NodeState.OPEN);
+                    n.state = NodeState.OPEN;
                 } else {
                     open.updateItem(n);
                 }

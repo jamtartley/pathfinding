@@ -3,7 +3,7 @@ import { NodeState } from "core/node.js";
 
 export function generate(grid) {
     let curr = grid.start;
-    curr.setState(NodeState.VISITED);
+    curr.state = NodeState.VISITED;
 
     let stack = [];
 
@@ -20,7 +20,7 @@ export function generate(grid) {
             curr.removeWallBetween(n);
 
             curr = n;
-            n.setState(NodeState.VISITED);
+            n.state = NodeState.VISITED;
         }
     }
 }

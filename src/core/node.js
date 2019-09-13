@@ -22,8 +22,8 @@ export default class Node {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.type = NodeType.NORMAL;
-        this.state = NodeState.NONE;
+        this._type = NodeType.NORMAL;
+        this._state = NodeState.NONE;
         this.parent = null;
         this.walls = {
             [WallDir.NORTH]: true,
@@ -33,13 +33,21 @@ export default class Node {
         };
     }
 
-    setType(type) {
-        this.type = type;
+    get type() {
+        return this._type;
+    }
+
+    set type(val) {
+        this._type = val;
         if (this.onTypeChange) this.onTypeChange(this);
     }
 
-    setState(state) {
-        this.state = state;
+    get state() {
+        return this._state;
+    }
+
+    set state(val) {
+        this._state = val;
         if (this.onStateChange) this.onStateChange(this);
     }
 

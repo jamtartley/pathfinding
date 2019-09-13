@@ -23,15 +23,15 @@ export default class Grid {
     }
 
     setStart(node) {
-        if (this.start) this.start.setType(NodeType.NORMAL);
+        if (this.start) this.start.type = NodeType.NORMAL;
         this.start = node;
-        node.setType(NodeType.START);
+        node.type = NodeType.START;
     }
 
     setEnd(node) {
-        if (this.end) this.end.setType(NodeType.NORMAL);
+        if (this.end) this.end.type = NodeType.NORMAL;
         this.end = node;
-        node.setType(NodeType.END);
+        node.type = NodeType.END;
     }
 
     randomiseTerminals() {
@@ -51,7 +51,7 @@ export default class Grid {
 
     resetNodes() {
         for (let node of this.nodes) {
-            node.setState(NodeState.NONE);
+            node.state = NodeState.NONE;
             node.f = node.g = node.h = 0;
             node.parent = null;
         }

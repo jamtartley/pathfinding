@@ -12,8 +12,7 @@ const solvedLine = {
 const nodeTypeStyles = {
     [NodeType.NORMAL]: {
         fill: "#153042",
-        stroke: false,
-        "stroke-width": 2
+        stroke: false
     },
     [NodeType.START]: {
         fill: "#A95B56",

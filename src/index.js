@@ -22,6 +22,6 @@ window.addEventListener("DOMContentLoaded", (event) => {
         addClasses: true
     });
 
-    ReactDOM.render(<SolverPanel controller={controller}/>, document.getElementById("solver-panel"));
     ReactDOM.render(<GeneratorPanel controller={controller}/>, document.getElementById("generator-panel"));
+    ReactDOM.render(<SolverPanel controller={controller}/>, document.getElementById("solver-panel"));
 });
